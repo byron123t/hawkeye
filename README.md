@@ -3,7 +3,6 @@
 **Brian Tang, Kang G. Shin** — University of Michigan
 
 [Project page](https://byron123t.github.io/hawkeye/) ·
-Paper (coming soon) ·
 [Hawkeye-4B](https://huggingface.co/byron123t/Hawkeye-4B) ·
 [Hawkeye-8B](https://huggingface.co/byron123t/Hawkeye-8B) ·
 [BSTRB dataset](https://huggingface.co/datasets/byron123t/BSTRB)
@@ -184,11 +183,11 @@ docs/               project page (GitHub Pages)
 ## Citation
 
 ```bibtex
-@misc{tang2026hawkeye,
-  title  = {Hawkeye4B: Reading Illegible Text with Vision Language Models},
-  author = {Tang, Brian and Shin, Kang G.},
-  year   = {2026},
-  note   = {Paper link coming soon}
+@article{tang2026hawkeye,
+  title   = {Hawkeye4B: Reading Illegible Text with Vision Language Models},
+  author  = {Tang, Brian and Shin, Kang G.},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2026}
 }
 ```
 
