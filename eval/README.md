@@ -9,5 +9,8 @@
 3. **Comparisons.** `compare.py <out> --pairs A:B ...` runs paired bootstrap tests (resampling
    videos and photos) with Holm correction across all tests printed.
 
-Settings used in the paper: Hawkeye at `--upscale 3` (the default); bases at `--upscale 1` (plain)
-and `--upscale 3` ("base x3"); `--max_new_tokens 2048`; test split (1,572 images).
+Settings used in the paper (the defaults of `run_local.py` unless noted): the transcription-only
+system prompt for every model (local and API; `--no_system_prompt` to disable), instruction text
+before the image, images JPEG re-encoded with the longest side <= 2,048 px; Hawkeye at
+`--upscale 3`, bases at `--upscale 1` (plain) and `--upscale 3` ("base x3"); greedy decoding,
+`--max_new_tokens 4096`, `--attn sdpa`; test split (1,572 images).

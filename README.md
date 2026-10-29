@@ -53,11 +53,23 @@ print(reader.read("photo.jpg"))
 
 or from the shell: `hawkeye-read photo.jpg --model 8b`.
 
-**Input contract.** Hawkeye was trained and evaluated on images upscaled **x3 with bicubic
-interpolation**, then capped by the processor at 1,003,520 pixels (min 65,536); one user turn
-(image, then prompt), no system prompt, greedy decoding, up to 2,048 new tokens. `Hawkeye.read`
-and `hawkeye.transcribe` do all of this; if you call `transformers` directly, upscale the image
-yourself first (`hawkeye.upscale(image)`).
+**Evaluation protocol.** Every held-out number in the paper uses the same protocol for Hawkeye and
+for base models, and `Hawkeye.read`, `hawkeye.transcribe`, `hawkeye-read` and `eval/run_local.py`
+apply it by default:
+
+1. the image is converted to RGB, scaled down to a longest side of 2,048 px (LANCZOS) if larger,
+   and re-encoded as JPEG quality 92 (`hawkeye.protocol.encode_image`; API models receive these
+   bytes);
+2. **Hawkeye only:** it is upscaled **x3 with bicubic interpolation** (base models: x1 in the
+   paper's table; "base x3" is also reported);
+3. the processor keeps it within 65,536–1,003,520 pixels;
+4. a system turn with a fixed transcription-only prompt (`hawkeye.SYSTEM_PROMPT`), then the user
+   turn with the instruction text first and the image second;
+5. greedy decoding, up to 4,096 new tokens, sdpa attention, bfloat16.
+
+`system_prompt=None` (`--no_system_prompt` on the command line) sends the user turn only. If you
+call `transformers` directly, reproduce steps 1–4 with `hawkeye.inference.prepare_image` and
+`hawkeye.inference.build_messages`.
 
 ## The BSTRB dataset
 
@@ -99,9 +111,9 @@ export OPENAI_BASE_URL=https://api.openai.com/v1 OPENAI_API_KEY=...
 python eval/run_api.py --model gpt-4o --out results/
 ```
 
-API runs use a fixed transcription-only system prompt (see `eval/run_api.py`); local models get no
-system prompt. Scoring normalizes case, punctuation and whitespace and is identical for all models
-(`hawkeye/metrics.py`).
+API and local models get the same transcription-only system prompt and the same JPEG-encoded
+image (`hawkeye/protocol.py`). Scoring normalizes case, punctuation and whitespace and is identical
+for all models (`hawkeye/metrics.py`).
 
 ## Reproduce training
 
@@ -152,7 +164,8 @@ reading-trace and per-step figures. All maps exclude attention-sink patches (`an
 
 ```
 hawkeye/            pip-installable package
-  inference.py        load / transcribe / Hawkeye class (x3 upscale contract)
+  inference.py        load / transcribe / Hawkeye class (the evaluation protocol)
+  protocol.py         system prompt and image encoding shared by local and API models
   metrics.py          WIR, WER, BoW P/R/F1, aligned F1, CER; degenerate-output filters
   stats.py            unit-clustered paired bootstrap, Holm correction
   data.py             BSTRB loader (Hugging Face layout)

@@ -6,7 +6,8 @@ Credentials come from the environment only:
     OPENAI_BASE_URL   e.g. https://api.openai.com/v1  or a LiteLLM / vLLM proxy URL ending in /v1
     OPENAI_API_KEY
 
-Protocol used for the paper's API baselines: the fixed transcription-only system prompt below,
+Protocol used for the paper's API baselines (hawkeye/protocol.py, the same system prompt and
+image encoding the local models get): the fixed transcription-only system prompt,
 then one user turn with the item's prompt and the image (JPEG, longest side <= 2048 px),
 temperature 0 where the endpoint accepts it, and a large output cap so reasoning models are not
 truncated (check `finish_reason == "length"` afterwards). Responses are appended to
@@ -22,7 +23,6 @@ from __future__ import annotations
 import argparse
 import base64
 import concurrent.futures as cf
-import io
 import json
 import os
 import random
@@ -35,32 +35,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from hawkeye.data import load_split, resolve_root, unit_of  # noqa: E402
+from hawkeye.protocol import SYSTEM_PROMPT, encode_image  # noqa: E402
 
-SYSTEM_PROMPT = (
-    "You are an OCR engine. Transcribe the text visible in the image exactly as it "
-    "appears.\n"
-    "Output rules:\n"
-    "- Output ONLY the transcribed text. No preamble, no explanation, no commentary, "
-    "no closing remarks.\n"
-    "- Do not describe the image. Do not say what the text is or where it is.\n"
-    "- Preserve the original line breaks: one visual line of text per output line.\n"
-    "- Do not wrap the output in quotes or code fences, and do not add Markdown.\n"
-    "- Do not correct spelling or expand abbreviations; reproduce what is printed.\n"
-    "- If no text is legible, output nothing."
-)
 RETRYABLE = {408, 409, 425, 429, 500, 502, 503, 504, 529, None}
 _lock = threading.Lock()
-
-
-def encode_image(path: str, max_side: int = 2048) -> str:
-    from PIL import Image
-    im = Image.open(path).convert("RGB")
-    if max(im.size) > max_side:
-        s = max_side / max(im.size)
-        im = im.resize((round(im.width * s), round(im.height * s)), Image.LANCZOS)
-    buf = io.BytesIO()
-    im.save(buf, "JPEG", quality=92)
-    return base64.b64encode(buf.getvalue()).decode()
 
 
 def call(base: str, key: str, model: str, image: str, prompt: str, *, max_tokens: int,
@@ -68,7 +46,7 @@ def call(base: str, key: str, model: str, image: str, prompt: str, *, max_tokens
     msgs = ([{"role": "system", "content": SYSTEM_PROMPT}] if system else []) + [
         {"role": "user", "content": [
             {"type": "text", "text": prompt},
-            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encode_image(image)}"}}]}]
+            {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64.b64encode(encode_image(image)).decode()}"}}]}]
     body = {"model": model, "messages": msgs, "max_tokens": max_tokens}
     if temperature is not None:
         body["temperature"] = temperature
