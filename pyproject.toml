@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hawkeye-ocr"
+version = "1.0.0"
+description = "Hawkeye: reading degraded scene text with fine-tuned Qwen3-VL models, and the BSTRB benchmark tools"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [{name = "Brian Tang"}, {name = "Kang G. Shin"}]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pillow>=10",
+]
+
+[project.optional-dependencies]
+# inference / evaluation with local models
+infer = ["torch>=2.4", "transformers>=4.57", "accelerate>=1.0", "huggingface_hub>=0.25"]
+# attention analysis and figures
+analysis = ["matplotlib>=3.8", "scipy>=1.11", "easyocr>=1.7"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+hawkeye-read = "hawkeye.cli:main"
+
+[project.urls]
+Homepage = "https://byron123t.github.io/hawkeye/"
+Repository = "https://github.com/byron123t/hawkeye"
+Models = "https://huggingface.co/byron123t/Hawkeye-4B"
+Dataset = "https://huggingface.co/datasets/byron123t/BSTRB"
+
+[tool.setuptools]
+packages = ["hawkeye"]

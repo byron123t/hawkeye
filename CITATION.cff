@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use Hawkeye or BSTRB, please cite the paper."
+title: "Hawkeye4B: Reading Illegible Text with Vision Language Models"
+authors:
+  - family-names: Tang
+    given-names: Brian
+    affiliation: University of Michigan
+    orcid: "https://orcid.org/0000-0001-6140-922X"
+  - family-names: Shin
+    given-names: Kang G.
+    affiliation: University of Michigan
+    orcid: "https://orcid.org/0000-0003-0086-8777"
+license: Apache-2.0
+repository-code: "https://github.com/byron123t/hawkeye"
+url: "https://byron123t.github.io/hawkeye/"
+year: 2026
+preferred-citation:
+  type: article
+  title: "Hawkeye4B: Reading Illegible Text with Vision Language Models"
+  authors:
+    - family-names: Tang
+      given-names: Brian
+    - family-names: Shin
+      given-names: Kang G.
+  year: 2026
+  notes: "Paper link coming soon."

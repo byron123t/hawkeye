@@ -1,0 +1,5 @@
+# Attention analysis and figures (analysis/), on top of ../requirements.txt.
+-r ../requirements.txt
+matplotlib>=3.8
+scipy>=1.11
+easyocr>=1.7

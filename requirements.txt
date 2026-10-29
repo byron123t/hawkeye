@@ -1,0 +1,10 @@
+# Inference and evaluation (the `hawkeye` package, eval/).
+# Versions used for the paper: Python 3.10, torch 2.6.0 (CUDA 12.4), transformers 4.57.0.
+torch>=2.4
+transformers>=4.57
+accelerate>=1.0
+huggingface_hub>=0.25
+numpy>=1.24
+pillow>=10
+# optional: faster attention for eval/run_local.py --attn flash_attention_2
+# flash-attn>=2.6

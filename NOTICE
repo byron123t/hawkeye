@@ -1,0 +1,19 @@
+Hawkeye
+Copyright 2026 Brian Tang and Kang G. Shin, University of Michigan
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It includes software derived from the Qwen3-VL fine-tuning framework ("qwen-vl-finetune",
+https://github.com/QwenLM/Qwen3-VL), Copyright Alibaba Cloud / the Qwen team, licensed under the
+Apache License, Version 2.0. The derived files are under train/qwenvl/:
+  data/data_processor.py, data/rope2d.py           unmodified
+  data/__init__.py                                  rewritten dataset registry
+  train/argument.py, train/trainer.py,
+  train/train_qwen.py                               unmodified
+  train/train_sft.py                                derived from train/train_qwen.py (changes listed
+                                                    in its docstring)
+train/scripts/zero3.json and zero3_offload.json are DeepSpeed configurations derived from the same
+framework.
+
+The Hawkeye model weights are fine-tuned from Qwen3-VL-4B-Instruct and Qwen3-VL-8B-Instruct
+(Apache License, Version 2.0).

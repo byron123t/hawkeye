@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+/build/
+/dist/
+.venv/
+# local data, results and checkpoints (anchored so the train/qwenvl/data package is kept)
+/data/
+/train/data/
+/runs/
+/train/runs/
+/results/
+/attn/
+/figs/
+/BSTRB/
+wandb/
+*.safetensors
+*.npy
