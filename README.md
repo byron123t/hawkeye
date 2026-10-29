@@ -84,7 +84,7 @@ export BSTRB_ROOT=$PWD/BSTRB
 
 | split | images | video frames (videos) | photos | labels |
 |---|---|---|---|---|
-| train | 7,434 | 6,734 (1,133) | 700 | GPT-5 transcriptions |
+| train | 7,417 | 6,722 (1,131) | 695 | GPT-5 transcriptions |
 | val | 369 | 333 (56) | 36 | human-verified |
 | test | 1,572 | 1,331 (224) | 241 | human-verified |
 
@@ -126,7 +126,7 @@ BSTRB_ROOT=/path/to/BSTRB bash scripts/train_8b.sh     # ~9 h (SFT 5 h with ZeRO
 Each script runs the two stages of the recipe:
 
 1. **SFT** (`scripts/sft.sh`, `qwenvl/train/train_sft.py`): full fine-tuning of the LLM, projector
-   and vision tower on the 6,734 BSTRB training frames, images upscaled x3; 420 steps, effective
+   and vision tower on the BSTRB training frames (6,734 in the paper; 6,722 in the released split), images upscaled x3; 420 steps, effective
    batch 32, learning rates 1e-6 (LLM) / 1e-5 (projector) / 1e-6 (vision tower), cosine schedule,
    3% warm-up. The checkpoint with the lowest loss on the validation split is kept
    (`best_checkpoint.py`; step 400 in the paper).
