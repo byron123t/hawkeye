@@ -23,10 +23,12 @@ On the held-out BSTRB test set (BoW F1, paired bootstrap over videos, Holm-corre
 
 | | Qwen3-VL base | Hawkeye | gain |
 |---|---|---|---|
-| 4B, video frames (1,331 frames, 224 videos) | .627 | .728 | **+10.1 pp** |
+| 4B, video frames (1,331 frames, 224 videos)¹ | .627 | .728 | **+10.1 pp** |
 | 8B, video frames | .675 | .744 | **+6.9 pp** |
 | 4B, photos (241) | .556 | .616 | **+6.0 pp** |
 | 8B, photos | .602 | .655 | **+5.3 pp** |
+
+¹ As reported in the paper. The public test split omits one of these videos for privacy (1,325 frames); there every score is at most 0.001 lower.
 
 The gains grow as text gets smaller, and neither size regresses significantly in BoW F1 on any of
 10 general OCR benchmarks.
@@ -84,9 +86,9 @@ export BSTRB_ROOT=$PWD/BSTRB
 
 | split | images | video frames (videos) | photos | labels |
 |---|---|---|---|---|
-| train | 7,417 | 6,722 (1,131) | 695 | GPT-5 transcriptions |
+| train | 7,399 | 6,704 (1,128) | 695 | GPT-5 transcriptions |
 | val | 369 | 333 (56) | 36 | human-verified |
-| test | 1,572 | 1,331 (224) | 241 | human-verified |
+| test | 1,566 | 1,325 (223) | 241 | human-verified |
 
 Each video contributes 5–6 frames sampled as the camera moves away from the object, so text
 shrinks from frame to frame; all frames of a video share its transcript. No video appears in more
@@ -126,7 +128,7 @@ BSTRB_ROOT=/path/to/BSTRB bash scripts/train_8b.sh     # ~9 h (SFT 5 h with ZeRO
 Each script runs the two stages of the recipe:
 
 1. **SFT** (`scripts/sft.sh`, `qwenvl/train/train_sft.py`): full fine-tuning of the LLM, projector
-   and vision tower on the BSTRB training frames (6,734 in the paper; 6,722 in the released split), images upscaled x3; 420 steps, effective
+   and vision tower on the BSTRB training frames (6,734 in the paper; 6,704 in the released split), images upscaled x3; 420 steps, effective
    batch 32, learning rates 1e-6 (LLM) / 1e-5 (projector) / 1e-6 (vision tower), cosine schedule,
    3% warm-up. The checkpoint with the lowest loss on the validation split is kept
    (`best_checkpoint.py`; step 400 in the paper).

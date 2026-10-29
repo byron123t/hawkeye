@@ -13,4 +13,4 @@ Settings used in the paper (the defaults of `run_local.py` unless noted): the tr
 system prompt for every model (local and API; `--no_system_prompt` to disable), instruction text
 before the image, images JPEG re-encoded with the longest side <= 2,048 px; Hawkeye at
 `--upscale 3`, bases at `--upscale 1` (plain) and `--upscale 3` ("base x3"); greedy decoding,
-`--max_new_tokens 4096`, `--attn sdpa`; test split (1,572 images).
+`--max_new_tokens 4096`, `--attn sdpa`; test split (1,566 images in the public release; 1,572 in the paper).
