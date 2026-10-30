@@ -1,0 +1,21 @@
+{
+ "frames": [
+  {
+   "id": "cereal",
+   "label": "Cereal box"
+  },
+  {
+   "id": "soup",
+   "label": "Soup can"
+  },
+  {
+   "id": "backcover",
+   "label": "Book back cover"
+  },
+  {
+   "id": "bookcover",
+   "label": "Book cover"
+  }
+ ],
+ "note": "Attention to image patches at each decoding step (last four layers, mean over heads; attention-sink patches excluded), each map scaled to its own maximum. Held-out BSTRB frames selected among those on which Hawkeye outperforms its base model at both sizes."
+}

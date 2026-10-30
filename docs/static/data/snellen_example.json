@@ -1,0 +1,156 @@
+{
+ "image": "static/images/snellen_example.png",
+ "heights_px": [
+  48,
+  38,
+  25,
+  13,
+  11,
+  9,
+  7,
+  5,
+  4
+ ],
+ "note": "One of the 50 charts, chosen to illustrate the two smallest rows (5 px and 4 px); the chart and tests above summarize all 50.",
+ "rows": [
+  "D",
+  "UZ",
+  "HED",
+  "VTUL",
+  "PCRKF",
+  "ZDENVTLO",
+  "EFDLHUNRPCKV",
+  "PVDNKLCRUZHEOT",
+  "URDLOKPTHVNCEZF"
+ ],
+ "models": [
+  {
+   "name": "Hawkeye 4B",
+   "char_accuracy": 0.9219,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLCRUZHEOT",
+     "accuracy": 1.0
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLEKPTHYNEEZF",
+     "accuracy": 0.667
+    }
+   ]
+  },
+  {
+   "name": "Hawkeye 8B",
+   "char_accuracy": 0.9375,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLCRUZHEOT",
+     "accuracy": 1.0
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLEKPTHVNEEZF",
+     "accuracy": 0.733
+    }
+   ]
+  },
+  {
+   "name": "Qwen3-VL-4B (base)",
+   "char_accuracy": 0.7812,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLORUZHEOT",
+     "accuracy": 0.929
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "SPOLARTHUNDRED",
+     "accuracy": 0.133
+    }
+   ]
+  },
+  {
+   "name": "Qwen3-VL-8B (base)",
+   "char_accuracy": 0.8,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLCRUZHEOT",
+     "accuracy": 1.0
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLLOPHTHUGEEZP",
+     "accuracy": 0.25
+    }
+   ]
+  },
+  {
+   "name": "Qwen3-VL-235B",
+   "char_accuracy": 0.7969,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLCRUZHEOT",
+     "accuracy": 1.0
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLDPTHUNDEEP",
+     "accuracy": 0.2
+    }
+   ]
+  },
+  {
+   "name": "Kimi K2.6",
+   "char_accuracy": 0.8594,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNXLORUZHEOT",
+     "accuracy": 0.857
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLCKPTHVREEF",
+     "accuracy": 0.533
+    }
+   ]
+  },
+  {
+   "name": "GPT-6 Astra",
+   "char_accuracy": 0.7969,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLORUZHEOT",
+     "accuracy": 0.929
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EROLOPTHVNREZF",
+     "accuracy": 0.2
+    }
+   ]
+  },
+  {
+   "name": "GPT-5",
+   "char_accuracy": 0.7812,
+   "small_rows": [
+    {
+     "gt": "PVDNKLCRUZHEOT",
+     "pred": "PVDNKLORUZHEOT",
+     "accuracy": 0.929
+    },
+    {
+     "gt": "URDLOKPTHVNCEZF",
+     "pred": "EAOLCTYVNISSEF",
+     "accuracy": 0.133
+    }
+   ]
+  }
+ ]
+}

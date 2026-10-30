@@ -1,0 +1,149 @@
+{
+ "note": "37 objects captured with Meta Ray-Ban smart glasses; paired over images, Holm-corrected.",
+ "rows": [
+  {
+   "size": "4B",
+   "variant": "Degenerate removed",
+   "metric": "Word inclusion",
+   "hawkeye": 0.4419,
+   "base": 0.3779,
+   "diff_pp": 6.4,
+   "lo_pp": -1.8,
+   "hi_pp": 15.24,
+   "p_holm": 0.5328,
+   "significant": false
+  },
+  {
+   "size": "4B",
+   "variant": "Degenerate removed",
+   "metric": "BoW F1",
+   "hawkeye": 0.4459,
+   "base": 0.2994,
+   "diff_pp": 14.65,
+   "lo_pp": 5.89,
+   "hi_pp": 24.05,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "4B",
+   "variant": "Degenerate removed",
+   "metric": "Aligned F1",
+   "hawkeye": 0.41,
+   "base": 0.2441,
+   "diff_pp": 16.59,
+   "lo_pp": 7.77,
+   "hi_pp": 26.01,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "4B",
+   "variant": "All captured",
+   "metric": "Word inclusion",
+   "hawkeye": 0.4061,
+   "base": 0.3552,
+   "diff_pp": 5.09,
+   "lo_pp": -2.8,
+   "hi_pp": 13.6,
+   "p_holm": 0.6432,
+   "significant": false
+  },
+  {
+   "size": "4B",
+   "variant": "All captured",
+   "metric": "BoW F1",
+   "hawkeye": 0.4014,
+   "base": 0.2614,
+   "diff_pp": 14.0,
+   "lo_pp": 5.03,
+   "hi_pp": 23.35,
+   "p_holm": 0.009,
+   "significant": true
+  },
+  {
+   "size": "4B",
+   "variant": "All captured",
+   "metric": "Aligned F1",
+   "hawkeye": 0.3638,
+   "base": 0.2097,
+   "diff_pp": 15.4,
+   "lo_pp": 6.77,
+   "hi_pp": 24.38,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "Degenerate removed",
+   "metric": "Word inclusion",
+   "hawkeye": 0.5205,
+   "base": 0.3903,
+   "diff_pp": 13.03,
+   "lo_pp": 6.91,
+   "hi_pp": 19.65,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "Degenerate removed",
+   "metric": "BoW F1",
+   "hawkeye": 0.5295,
+   "base": 0.4148,
+   "diff_pp": 11.47,
+   "lo_pp": 5.28,
+   "hi_pp": 18.44,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "Degenerate removed",
+   "metric": "Aligned F1",
+   "hawkeye": 0.4846,
+   "base": 0.3612,
+   "diff_pp": 12.34,
+   "lo_pp": 6.5,
+   "hi_pp": 19.18,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "All captured",
+   "metric": "Word inclusion",
+   "hawkeye": 0.48,
+   "base": 0.3411,
+   "diff_pp": 13.89,
+   "lo_pp": 7.57,
+   "hi_pp": 20.8,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "All captured",
+   "metric": "BoW F1",
+   "hawkeye": 0.4921,
+   "base": 0.3664,
+   "diff_pp": 12.58,
+   "lo_pp": 5.38,
+   "hi_pp": 20.38,
+   "p_holm": 0.0008,
+   "significant": true
+  },
+  {
+   "size": "8B",
+   "variant": "All captured",
+   "metric": "Aligned F1",
+   "hawkeye": 0.4515,
+   "base": 0.3232,
+   "diff_pp": 12.83,
+   "lo_pp": 5.86,
+   "hi_pp": 20.39,
+   "p_holm": 0.0008,
+   "significant": true
+  }
+ ]
+}

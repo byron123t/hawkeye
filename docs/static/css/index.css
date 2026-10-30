@@ -318,3 +318,79 @@ table.res .ci { color: var(--ink-3); font-weight: 400; font-size: .85em; }
   .chart-card { padding: .8rem .7rem .7rem; }
   .assumptions { gap: .5rem .9rem; }
 }
+
+/* ===================== interactive figures (2026-10-30) ===================== */
+:root { --c-eng: #a8742a; --bad: #c43c3c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-eng: #d6a25a; --bad: #ff7b7b; } }
+:root[data-theme="dark"] { --c-eng: #d6a25a; --bad: #ff7b7b; }
+.chart-fig { margin: 0 0 1.6rem; }
+.chart-head { display: flex; flex-wrap: wrap; gap: .5rem .8rem; margin-bottom: .6rem; }
+.seg.seg-sm { margin: 0; display: inline-flex; width: auto; }
+.seg.seg-sm .seg-btn { font-size: .82rem; padding: .32rem .75rem; }
+.chart .frame { fill: none; stroke: var(--rule); }
+.chart .zero { stroke: var(--ink-2); stroke-width: 1.2; }
+.chart .divider { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart .band-row { fill: var(--bg-soft); opacity: .6; }
+.chart .val.strong, .chart .lbl.strong { fill: var(--ink); font-weight: 700; }
+.chart .val.sig { fill: var(--accent); font-weight: 700; }
+.chart .val.ns { fill: var(--ink-3); }
+.line-chart .hit:focus-visible { fill: var(--accent-soft); fill-opacity: .45; }
+.leg-btn { font: inherit; font-size: .85rem; color: var(--ink-2); background: transparent; border: 1px solid transparent; border-radius: 8px; padding: .1rem .4rem; cursor: pointer; }
+.leg-btn:hover { border-color: var(--rule); }
+.leg-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.leg-btn.is-off { opacity: .4; text-decoration: line-through; }
+.tip-ci { color: var(--ink-3); font-size: .9em; }
+.tip-sub { color: var(--ink-3); font-size: .78rem; margin: .1rem 0 .35rem 1.6rem; }
+.tip-block + .tip-block { margin-top: .2rem; }
+.ocr-sharp { margin-top: 1.2rem; border-top: 1px solid var(--rule); padding-top: .8rem; }
+/* heatmap */
+.hm-card { padding: .9rem .9rem .8rem; }
+.hm-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.heat { border-collapse: separate; border-spacing: 2px; font-size: .8rem; font-variant-numeric: tabular-nums; min-width: 760px; width: 100%; }
+table.heat th, table.heat td { padding: .32rem .3rem; text-align: center; border-radius: 4px; }
+table.heat thead th { vertical-align: bottom; font-weight: 600; color: var(--ink-2); }
+table.heat .hm-model { text-align: left; white-space: nowrap; font-weight: 500; color: var(--ink-2); position: sticky; left: 0; background: var(--surface); z-index: 1; }
+table.heat tr.is-ours .hm-model { color: var(--ink); font-weight: 700; }
+table.heat tr.is-ours .mname { text-decoration: underline; text-underline-offset: 3px; }
+table.heat td.hm-best { box-shadow: inset 0 0 0 2px #ffb000; font-weight: 700; }
+table.heat td.hm-na { color: var(--ink-3); }
+.hm-sort { font: inherit; font-weight: 600; color: var(--ink-2); background: transparent; border: 0; cursor: pointer; padding: 0; line-height: 1.2; }
+.hm-sort:hover, .hm-sort.is-on { color: var(--accent); }
+.hm-sort:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.hm-key { display: flex; align-items: center; gap: .5rem; margin-top: .7rem; font-size: .8rem; color: var(--ink-3); flex-wrap: wrap; }
+.hm-key-bar { width: 160px; height: 10px; border-radius: 5px; }
+.hm-key-best { width: 14px; height: 14px; border-radius: 3px; box-shadow: inset 0 0 0 2px #ffb000; margin-left: .8rem; }
+/* Snellen example */
+.snx-split { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; }
+.snx-fig { margin: 0; }
+.snx-fig img { max-height: 520px; width: auto; max-width: 100%; display: block; margin: 0 auto; background: #fff; }
+.snx-text { color: var(--ink-2); margin: 0; }
+.mono { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; }
+table.snx-rows td, table.snx-rows th { text-align: left; }
+table.snx-rows tr.hl td { color: var(--ink); font-weight: 650; background: var(--accent-soft); }
+table.snx-read td.mono { white-space: nowrap; }
+.ch.bad { color: var(--bad); font-weight: 700; }
+.ch.miss { opacity: .85; }
+@media (max-width: 860px) { .snx-split { grid-template-columns: 1fr; } .snx-fig img { max-height: 380px; } }
+@media (max-width: 520px) { .seg.seg-sm { display: inline-flex; width: auto; } .seg.seg-sm .seg-btn { font-size: .78rem; padding: .3rem .55rem; } }
+/* attention viewer */
+.attn-head { justify-content: space-between; }
+.attn-controls { display: flex; align-items: center; gap: .8rem; margin: .2rem 0 .9rem; }
+.attn-controls[hidden] { display: none; }
+.attn-controls input[type=range] { flex: 1; accent-color: var(--accent); }
+.attn-play { font: inherit; width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer; }
+.attn-play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.attn-count { font-size: .85rem; color: var(--ink-3); font-variant-numeric: tabular-nums; min-width: 7.5rem; text-align: right; }
+.attn-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.attn-panel { min-width: 0; display: flex; flex-direction: column; gap: .35rem; transition: opacity .2s ease; }
+.attn-panel.is-done .attn-stage { opacity: .55; }
+.attn-title { font-weight: 600; font-size: .9rem; color: var(--ink-2); }
+.attn-panel.is-ours .attn-title { color: var(--ink); font-weight: 700; }
+.attn-panel.is-ours .mname { text-decoration: underline; text-underline-offset: 3px; }
+.attn-stage { border-radius: 8px; overflow: hidden; background: #000; }
+.attn-stage canvas { display: block; width: 100%; }
+.attn-meta { font-size: .78rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.attn-text { font-size: .76rem; line-height: 1.45; color: var(--ink-2); height: 4.4em; overflow: hidden; letter-spacing: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+.attn-text mark { background: #ffb000; color: #16191d; border-radius: 2px; padding: 0 1px; }
+@media (max-width: 860px) { .attn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .attn-grid { grid-template-columns: 1fr 1fr; gap: .6rem; } .attn-head { flex-direction: column; } }
