@@ -155,6 +155,7 @@ table.res td.up { color: var(--accent); font-weight: 600; }
 .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: .5rem; vertical-align: 0; }
 .pill { display: inline-block; font-size: .75rem; padding: .05rem .5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--ink-3); }
 tr.is-ours td:first-child { font-weight: 650; }
+tr.is-ours .mname { text-decoration: underline; text-underline-offset: 3px; }
 #speed-table td:first-child, #speed-table td:nth-child(2) { white-space: nowrap; }
 
 /* ---------- speed chart ---------- */
@@ -211,3 +212,13 @@ pre .c { color: var(--ink-3); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* avoid one-word last lines */
+p, figcaption, li, .lede, .caption, .note { text-wrap: pretty; }
+h1, h2, h3, .card-num { text-wrap: balance; }
+
+/* latency/cost table: ten columns, so tighter cells and wrapping headers */
+#speed-table { font-size: .84rem; }
+#speed-table th, #speed-table td { padding: .5rem .45rem; }
+#speed-table th { white-space: normal; line-height: 1.25; }
+#speed-table td:first-child { white-space: nowrap; }

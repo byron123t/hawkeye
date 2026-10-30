@@ -55,6 +55,18 @@
     return isNaN(v) || v < 0 ? (data.gpu_price_usd_per_h || 0) : v;
   }
 
+  function num(id, dflt) {
+    var el = document.getElementById(id);
+    var v = el ? parseFloat(el.value) : NaN;
+    return isNaN(v) || v < 0 ? dflt : v;
+  }
+
+  function dailyCost(m, data) {
+    var c = costOf(m, data);
+    if (c === null || c === undefined || isNaN(c)) return null;
+    return c / 1000 * num("reads-per-s", 1) * 3600 * num("hours-per-day", 16);
+  }
+
   function costOf(m, data) {
     if (m.kind === "local" && m.gpu_hours_per_1k != null) return m.gpu_hours_per_1k * gpuPrice(data);
     return m.cost_per_1k_frames_usd;
@@ -67,15 +79,16 @@
     tb.innerHTML = rows.map(function (m) {
       var ours = (m.name || "").toLowerCase().indexOf("hawkeye") >= 0;
       return '<tr class="' + (ours ? "is-ours" : "") + '">' +
-        '<td><span class="swatch" style="background:' + colorOf(m) + '"></span>' + esc(m.name) +
+        '<td><span class="swatch" style="background:' + colorOf(m) + '"></span><span class="mname">' + esc(m.name) + "</span>" +
         ' <span class="pill">' + (m.kind === "local" ? "local" : "API") + "</span></td>" +
         "<td>" + fmt(m.bstrb_video_f1, 3) + "</td>" +
         "<td>" + fmt(m.vram_gb, 1) + "</td>" +
         "<td>" + fmt(m.tflops_per_crop, 1) + "</td>" +
         "<td>" + fmt(m.ttft_s, 2) + "</td>" +
-        "<td>" + (m.s_per_token == null ? "&mdash;" : fmt(m.s_per_token * 1000, 0)) + "</td>" +
+        "<td>" + (m.decode_tok_s == null ? "&mdash;" : fmt(m.decode_tok_s, 0)) + "</td>" +
         "<td>" + fmt(m.latency_s, 2) + "</td>" +
-        "<td>" + money(costOf(m, data)) + (m.kind === "local" ? "*" : "") + "</td></tr>";
+        "<td>" + money(costOf(m, data)) + (m.kind === "local" ? "*" : "") + "</td>" +
+        "<td>" + money(dailyCost(m, data)) + "</td></tr>";
     }).join("");
   }
 
@@ -120,6 +133,10 @@
       if (!pe.value) pe.value = (data.gpu_price_usd_per_h || 0).toFixed(2);
       pe.addEventListener("input", function () { renderTable(data); });
     }
+    ["reads-per-s", "hours-per-day"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener("input", function () { renderTable(data); });
+    });
     var t = null;
     window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () { renderChart(data); }, 150); });
     var note = document.getElementById("speed-note");
@@ -170,3 +187,20 @@
     try { localStorage.setItem(key, next); } catch (e) {}
   });
 })();
+
+/* Join the last two words of each paragraph with a non-breaking space so that no paragraph ends
+   with a single word on its own line (for browsers without text-wrap: pretty). */
+(function () {
+  var sel = "p, figcaption, li, .lbl";
+  document.querySelectorAll(sel).forEach(function (el) {
+    if (el.closest("pre, code, table")) return;
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var last = null, n;
+    while ((n = walker.nextNode())) { if (n.nodeValue.trim()) last = n; }
+    if (!last) return;
+    var v = last.nodeValue.replace(/\s+$/, "");
+    var i = v.lastIndexOf(" ");
+    if (i > 0 && v.length - i < 14) last.nodeValue = v.slice(0, i) + "\u00a0" + v.slice(i + 1);
+  });
+})();
+

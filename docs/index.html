@@ -7,7 +7,7 @@
   <meta name="description" content="Hawkeye reads the small, blurry, far-away text that smart glasses and phone cameras actually capture. BSTRB benchmark, Hawkeye 4B/8B models, code.">
   <meta property="og:title" content="Hawkeye4B: Reading Illegible Text with Vision Language Models">
   <meta property="og:description" content="A 4B vision-language model that keeps reading when text gets small and blurry, and the BSTRB benchmark built from real walk-back videos.">
-  <meta property="og:image" content="static/videos/shelf_walk.jpg">
+  <meta property="og:image" content="static/videos/laptop_walk.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -24,8 +24,8 @@
     <p class="kicker">BSTRB benchmark &middot; Hawkeye 4B &amp; 8B</p>
     <h1 class="title"><span class="name">Hawkeye</span>: Reading Illegible Text<br class="br-wide"> with Vision Language Models</h1>
     <div class="authors">
-      <a href="https://orcid.org/0000-0001-6140-922X">Brian Tang</a>
-      <a href="https://orcid.org/0000-0003-0086-8777">Kang G. Shin</a>
+      <a href="https://bjaytang.com">Brian Tang</a>
+      <a href="https://web.eecs.umich.edu/~kgshin/">Kang G. Shin</a>
     </div>
     <div class="affil">University of Michigan, Ann Arbor</div>
 
@@ -44,15 +44,16 @@
   <div class="wrap wide">
     <div class="demo">
       <div class="seg" role="tablist" aria-label="Demo clip">
-        <button role="tab" class="seg-btn is-active" data-clip="shelf_walk" aria-selected="true">Approach: shelf</button>
-        <button role="tab" class="seg-btn" data-clip="table_walk" aria-selected="false">Approach: table</button>
+        <button role="tab" class="seg-btn is-active" data-clip="laptop_walk" aria-selected="true">Laptop screen</button>
         <button role="tab" class="seg-btn" data-clip="shelf_hover" aria-selected="false">Hand-guided: shelf</button>
+        <button role="tab" class="seg-btn" data-clip="supplement_walk" aria-selected="false">Supplement label</button>
         <button role="tab" class="seg-btn" data-clip="table_hover" aria-selected="false">Hand-guided: table</button>
+        <button role="tab" class="seg-btn" data-clip="book_walk" aria-selected="false">Book</button>
       </div>
       <div class="player" id="player">
         <video id="demo-video" controls autoplay muted loop playsinline preload="metadata"
-               poster="static/videos/shelf_walk.jpg" aria-label="Demonstration: transcriptions of smartphone recordings by four models">
-          <source id="demo-src" src="static/videos/shelf_walk.mp4" type="video/mp4">
+               poster="static/videos/laptop_walk.jpg" aria-label="Demonstration: transcriptions of smartphone recordings by six models">
+          <source id="demo-src" src="static/videos/laptop_walk.mp4" type="video/mp4">
         </video>
         <div class="player-missing" id="player-missing" hidden>
           <i class="fa-solid fa-film"></i>
@@ -61,8 +62,9 @@
       </div>
       <p class="caption">Smartphone recordings of household objects. At 2&nbsp;Hz, the region in the green box is cropped
         and transcribed by base Qwen3-VL-4B and -8B, Hawkeye 4B and 8B, GPT-6 Astra and Claude Opus 5.5. Each panel shows the
-        most recent transcription, its latency, and its edit-tolerant bag-of-words F1 against the full product label; words
-        that do not occur on the label are shown in red. All sampled crops are shown; none were selected.</p>
+        most recent transcription and its latency, together with the cumulative edit-tolerant bag-of-words F1 over all crops
+        read so far in the clip. Correct words are shown in white and incorrect words in red. All sampled crops are shown;
+        none were selected.</p>
     </div>
   </div>
 </header>
@@ -185,27 +187,37 @@
 <section class="section" id="speed">
   <div class="wrap">
     <h2>Latency and Cost</h2>
-    <p class="lede" id="speed-lede">Median latency per crop on the 64 crops of the demonstration recordings, with all models given identical inputs. On a single local GPU (8.6&nbsp;GB of memory for the 4B model, 16.7&nbsp;GB for the 8B model), Hawkeye requires approximately one second per crop, comparable to Qwen3-VL-235B served through an API and 10&ndash;16 times faster than the reasoning API models. At an assumed GPU rental price of $0.80 per hour, this corresponds to about $0.25 per 1,000 crops, compared with $12&ndash;18 for the reasoning API models.</p>
+    <p class="lede" id="speed-lede">Latency, memory, compute and cost on the 70 crops of the demonstration recordings, with all
+      models given identical inputs. On a single local GPU (8.7&nbsp;GB of memory for the 4B model and 16.7&nbsp;GB for the 8B model),
+      Hawkeye has a median latency below one second per crop, comparable to Qwen3-VL-235B served through an API and 10&ndash;13 times
+      lower than the reasoning API models. Repetition loops on dense text increase the mean GPU time, which determines the local
+      cost.</p>
     <div id="speed-chart" class="chart"></div>
     <div class="table-wrap">
       <table class="res" id="speed-table">
         <thead><tr>
           <th>Model</th><th>Accuracy<span class="th-sub">BSTRB video BoW F1</span></th>
           <th>VRAM<span class="th-sub">peak, GB</span></th><th>Compute<span class="th-sub">TFLOPs per crop</span></th>
-          <th>First token<span class="th-sub">seconds</span></th><th>Per token<span class="th-sub">milliseconds</span></th>
-          <th>Latency<span class="th-sub">seconds per crop</span></th><th>Cost<span class="th-sub">USD per 1,000 crops</span></th>
+          <th>First token<span class="th-sub">seconds</span></th><th>Decode speed<span class="th-sub">tokens per second</span></th>
+          <th>Latency<span class="th-sub">seconds per crop</span></th><th>Cost<span class="th-sub">USD per 1,000 crops</span></th><th>Cost per day<span class="th-sub">USD, continuous use</span></th>
         </tr></thead>
-        <tbody><tr><td colspan="8" class="muted">Measurements are being added.</td></tr></tbody>
+        <tbody><tr><td colspan="9" class="muted">Measurements are being added.</td></tr></tbody>
       </table>
     </div>
     <p class="note price-row">* Local cost is the mean GPU time per crop multiplied by an assumed rental price for one RTX 6000 Ada of
-      <label>$<input id="gpu-price" type="number" min="0" step="0.05" inputmode="decimal" aria-label="GPU rental price in US dollars per hour" style="width:4.5em"> per hour</label>
-      (editable). API cost is computed from token counts and list prices.</p>
+      <label>$<input id="gpu-price" type="number" min="0" step="0.05" inputmode="decimal" aria-label="GPU rental price in US dollars per hour" style="width:4.5em"> per hour</label>.
+      API cost is computed from token counts and list prices. Cost per day assumes continuous reading on smart glasses at
+      <label><input id="reads-per-s" type="number" min="0" step="0.5" value="1" inputmode="decimal" aria-label="Reads per second" style="width:3.5em"> read(s) per second</label>
+      for <label><input id="hours-per-day" type="number" min="0" max="24" step="1" value="16" inputmode="decimal" aria-label="Hours of use per day" style="width:3.5em"> hours per day</label>;
+      all three values can be edited. For local models it is the GPU time actually used; reading at more than about one crop per
+      second requires a second GPU.</p>
     <p class="note" id="speed-note"></p>
     <h3 class="subhead">Accuracy on the demonstration recordings</h3>
-    <p class="lede">The same 64 crops scored against the authors' transcriptions of the six labelled products (tea bag, honey,
-      Lysol, Scott, Bounty and Band-Aid packages). Because word order on a package is arbitrary, only order-independent
-      metrics are reported: bag-of-words F1, word inclusion rate, and an edit-tolerant bag-of-words F1, in which a word matches an unmatched reference
+    <p class="lede">The same 70 crops scored against reference transcriptions of the eight labelled objects: the tea bag, honey,
+      Lysol, Bounty and Band-Aid packages (transcribed by the authors), and a book, a supplement label and a web page (the agreement
+      of GPT-6 Astra and Claude Opus 5.5 on close-up photographs, keeping only words that both read). Because word order on a
+      package is arbitrary, only order-independent metrics are reported, each computed per crop and averaged over crops:
+      bag-of-words F1, word inclusion rate, and an edit-tolerant bag-of-words F1, in which a word matches an unmatched reference
       word if their normalized edit distance is at most 0.2, and a word split or merged at one space (e.g. &ldquo;Sue Bee&rdquo;
       and &ldquo;SueBee&rdquo;) counts as a single match.</p>
     <div class="table-wrap">
@@ -213,27 +225,27 @@
         <thead><tr><th>Model</th><th>BoW F1</th><th>Word inclusion</th><th>Edit-tolerant BoW F1</th></tr></thead>
         <tbody>
           <!-- demo-accuracy:start -->
-          <tr class="is-ours"><td>Hawkeye 4B <span class="pill">local</span></td><td>0.324</td><td>0.248</td><td>0.332</td></tr>
-          <tr class="is-ours"><td>Hawkeye 8B <span class="pill">local</span></td><td>0.277</td><td>0.234</td><td>0.291</td></tr>
-          <tr><td>GPT-5 <span class="pill">API</span></td><td>0.267</td><td>0.193</td><td>0.287</td></tr>
-          <tr><td>Claude Opus 5.5 <span class="pill">API</span></td><td>0.218</td><td>0.159</td><td>0.273</td></tr>
-          <tr><td>Kimi K2.6 <span class="pill">API</span></td><td>0.231</td><td>0.186</td><td>0.268</td></tr>
-          <tr><td>Qwen3-VL-235B <span class="pill">API</span></td><td>0.236</td><td>0.191</td><td>0.265</td></tr>
-          <tr><td>Qwen3-VL-4B (base) <span class="pill">local</span></td><td>0.226</td><td>0.189</td><td>0.236</td></tr>
-          <tr><td>GPT-6 Astra <span class="pill">API</span></td><td>0.214</td><td>0.190</td><td>0.231</td></tr>
-          <tr><td>Qwen3-VL-8B (base) <span class="pill">local</span></td><td>0.221</td><td>0.192</td><td>0.229</td></tr>
+          <tr class="is-ours"><td><span class="mname">Hawkeye 4B</span> <span class="pill">local</span></td><td>0.273</td><td>0.231</td><td>0.282</td></tr>
+          <tr class="is-ours"><td><span class="mname">Hawkeye 8B</span> <span class="pill">local</span></td><td>0.253</td><td>0.241</td><td>0.267</td></tr>
+          <tr><td><span class="mname">GPT-6 Astra</span> <span class="pill">API</span></td><td>0.215</td><td>0.205</td><td>0.223</td></tr>
+          <tr><td><span class="mname">Kimi K2.6</span> <span class="pill">API</span></td><td>0.190</td><td>0.175</td><td>0.222</td></tr>
+          <tr><td><span class="mname">Qwen3-VL-235B</span> <span class="pill">API</span></td><td>0.186</td><td>0.162</td><td>0.213</td></tr>
+          <tr><td><span class="mname">Claude Opus 5.5</span> <span class="pill">API</span></td><td>0.159</td><td>0.125</td><td>0.212</td></tr>
+          <tr><td><span class="mname">Qwen3-VL-8B (base)</span> <span class="pill">local</span></td><td>0.190</td><td>0.187</td><td>0.197</td></tr>
+          <tr><td><span class="mname">GPT-5</span> <span class="pill">API</span></td><td>0.157</td><td>0.124</td><td>0.187</td></tr>
+          <tr><td><span class="mname">Qwen3-VL-4B (base)</span> <span class="pill">local</span></td><td>0.176</td><td>0.173</td><td>0.184</td></tr>
           <!-- demo-accuracy:end -->
         </tbody>
       </table>
     </div>
     <p class="note">Each reference covers the whole package, while a crop usually shows only part of it, which bounds recall
-      equally for all models. Crops were assigned to products by inspection. With six products and 64 crops, these figures
+      equally for all models. Crops were assigned to products by inspection. With eight objects and 70 crops, these figures
       illustrate the demonstration and are not a benchmark result; see the BSTRB results above.</p>
   </div>
 </section>
 <!-- Speed data: paste the contents of static/data/speed.json here. When non-empty it is used
      instead of fetching the file, so the page also works when opened straight from disk. -->
-<script id="speed-data" type="application/json">{"note": "Medians per crop. Local models: batch size 1, Hugging Face transformers, bfloat16. API models: streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper; hidden reasoning tokens are included in latency and cost. Cost is computed from token counts and list prices (October 2026). Accuracy is BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation. Where an API returns the response in a single chunk, first-token latency equals total latency and no per-token latency is given. Local cost = mean GPU time per crop x the GPU rental price above; VRAM is peak allocated memory; TFLOPs are estimated as 2 x parameters x tokens processed.", "frames": 64, "gpu": "NVIDIA RTX 6000 Ada Generation", "gpu_price_usd_per_h": 0.8, "models": [{"name": "Hawkeye 4B", "kind": "local", "params": "4B", "bstrb_video_f1": 0.728, "ttft_s": 0.4602, "s_per_token": 0.023, "latency_s": 0.89, "tokens": 17.0, "cost_per_1k_frames_usd": 0.26, "n": 64, "errors": 0, "demo_bow_f1": 0.3235, "demo_wir": 0.2476, "demo_fuzzy_f1": 0.3318, "vram_gb": 8.6, "tflops_per_crop": 7.0, "gpu_hours_per_1k": 0.326}, {"name": "Hawkeye 8B", "kind": "local", "params": "8B", "bstrb_video_f1": 0.744, "ttft_s": 0.4843, "s_per_token": 0.0268, "latency_s": 0.947, "tokens": 15.5, "cost_per_1k_frames_usd": 0.24, "n": 64, "errors": 0, "demo_bow_f1": 0.2768, "demo_wir": 0.2338, "demo_fuzzy_f1": 0.2909, "vram_gb": 16.7, "tflops_per_crop": 13.9, "gpu_hours_per_1k": 0.298}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "params": "4B", "bstrb_video_f1": 0.627, "ttft_s": 0.3851, "s_per_token": 0.0227, "latency_s": 0.6826, "tokens": 12.0, "cost_per_1k_frames_usd": 0.26, "n": 64, "errors": 0, "demo_bow_f1": 0.2264, "demo_wir": 0.1892, "demo_fuzzy_f1": 0.2356, "vram_gb": 8.4, "tflops_per_crop": 2.2, "gpu_hours_per_1k": 0.33}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "params": "8B", "bstrb_video_f1": 0.675, "ttft_s": 0.4562, "s_per_token": 0.0215, "latency_s": 0.6924, "tokens": 11.0, "cost_per_1k_frames_usd": 0.22, "n": 64, "errors": 0, "demo_bow_f1": 0.2209, "demo_wir": 0.1923, "demo_fuzzy_f1": 0.2287, "vram_gb": 16.5, "tflops_per_crop": 4.3, "gpu_hours_per_1k": 0.276}, {"name": "Qwen3-VL-235B", "kind": "api", "params": "235B (22B active)", "bstrb_video_f1": 0.726, "ttft_s": 0.9001, "s_per_token": null, "latency_s": 1.0126, "tokens": 12.0, "cost_per_1k_frames_usd": 0.19, "n": 64, "errors": 0, "demo_bow_f1": 0.236, "demo_wir": 0.1909, "demo_fuzzy_f1": 0.265, "reasoning_tokens": 0.0}, {"name": "Kimi K2.6", "kind": "api", "params": null, "bstrb_video_f1": 0.723, "ttft_s": 13.9535, "s_per_token": null, "latency_s": 14.0318, "tokens": 11.5, "cost_per_1k_frames_usd": 12.49, "n": 64, "errors": 0, "demo_bow_f1": 0.2313, "demo_wir": 0.186, "demo_fuzzy_f1": 0.2678, "reasoning_tokens": 2926.0}, {"name": "GPT-6 Astra", "kind": "api", "params": null, "bstrb_video_f1": 0.709, "ttft_s": 8.7878, "s_per_token": 0.0144, "latency_s": 9.1227, "tokens": 18.5, "cost_per_1k_frames_usd": 17.92, "n": 64, "errors": 0, "demo_bow_f1": 0.2137, "demo_wir": 0.1898, "demo_fuzzy_f1": 0.2311, "reasoning_tokens": 241.5}, {"name": "GPT-5", "kind": "api", "params": null, "bstrb_video_f1": 0.649, "ttft_s": 12.8628, "s_per_token": null, "latency_s": 12.8682, "tokens": 17.0, "cost_per_1k_frames_usd": 11.85, "n": 64, "errors": 0, "demo_bow_f1": 0.2674, "demo_wir": 0.1932, "demo_fuzzy_f1": 0.2869, "reasoning_tokens": 1056.0}, {"name": "Claude Opus 5.5", "kind": "api", "params": null, "bstrb_video_f1": null, "ttft_s": 1.5507, "s_per_token": 0.0061, "latency_s": 1.6431, "tokens": 16.0, "cost_per_1k_frames_usd": 3.05, "n": 64, "errors": 0, "demo_bow_f1": 0.2185, "demo_wir": 0.1591, "demo_fuzzy_f1": 0.273, "reasoning_tokens": 37.5}]}</script>
+<script id="speed-data" type="application/json">{"note": "Medians per crop. Local models: batch size 1, Hugging Face transformers, bfloat16. API models: streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper; hidden reasoning tokens are included in latency and cost. Cost is computed from token counts and list prices (October 2026). Accuracy is BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation. Where an API returns the response in a single chunk, first-token latency equals total latency and no decode speed is given. Decode speed is the number of generated tokens after the first divided by the time after the first token, pooled over crops. Local cost = mean GPU time per crop x the GPU rental price above; VRAM is peak allocated memory; TFLOPs are estimated as 2 x parameters x tokens processed.", "frames": 70, "gpu": "NVIDIA RTX 6000 Ada Generation", "gpu_price_usd_per_h": 0.8, "models": [{"name": "Hawkeye 4B", "kind": "local", "params": "4B", "bstrb_video_f1": 0.728, "ttft_s": 0.4822, "s_per_token": 0.0208, "latency_s": 0.9893, "tokens": 26.5, "cost_per_1k_frames_usd": 1.85, "n": 70, "errors": 0, "decode_tok_s": 45.3, "demo_bow_f1": 0.273, "demo_wir": 0.2308, "demo_fuzzy_f1": 0.2819, "vram_gb": 8.7, "tflops_per_crop": 9.9, "gpu_hours_per_1k": 2.308}, {"name": "Hawkeye 8B", "kind": "local", "params": "8B", "bstrb_video_f1": 0.744, "ttft_s": 0.5605, "s_per_token": 0.021, "latency_s": 0.8723, "tokens": 17.0, "cost_per_1k_frames_usd": 1.51, "n": 70, "errors": 0, "decode_tok_s": 45.1, "demo_bow_f1": 0.2531, "demo_wir": 0.2413, "demo_fuzzy_f1": 0.267, "vram_gb": 16.7, "tflops_per_crop": 19.4, "gpu_hours_per_1k": 1.89}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "params": "4B", "bstrb_video_f1": 0.627, "ttft_s": 0.3926, "s_per_token": 0.0215, "latency_s": 0.8464, "tokens": 17.0, "cost_per_1k_frames_usd": 1.71, "n": 70, "errors": 0, "decode_tok_s": 42.1, "demo_bow_f1": 0.1761, "demo_wir": 0.1728, "demo_fuzzy_f1": 0.1836, "vram_gb": 8.7, "tflops_per_crop": 3.9, "gpu_hours_per_1k": 2.143}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "params": "8B", "bstrb_video_f1": 0.675, "ttft_s": 0.4652, "s_per_token": 0.0204, "latency_s": 0.7112, "tokens": 12.5, "cost_per_1k_frames_usd": 1.29, "n": 70, "errors": 0, "decode_tok_s": 46.0, "demo_bow_f1": 0.1895, "demo_wir": 0.187, "demo_fuzzy_f1": 0.1971, "vram_gb": 16.7, "tflops_per_crop": 7.5, "gpu_hours_per_1k": 1.616}, {"name": "Qwen3-VL-235B", "kind": "api", "params": "235B (22B active)", "bstrb_video_f1": 0.726, "ttft_s": 0.888, "s_per_token": null, "latency_s": 0.9778, "tokens": 12.5, "cost_per_1k_frames_usd": 1.02, "n": 70, "errors": 0, "decode_tok_s": 66.1, "demo_bow_f1": 0.1861, "demo_wir": 0.1624, "demo_fuzzy_f1": 0.213, "reasoning_tokens": 0.0}, {"name": "Kimi K2.6", "kind": "api", "params": null, "bstrb_video_f1": 0.723, "ttft_s": 9.2841, "s_per_token": null, "latency_s": 9.5236, "tokens": 9.5, "cost_per_1k_frames_usd": 11.81, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.1904, "demo_wir": 0.1751, "demo_fuzzy_f1": 0.2218, "reasoning_tokens": 2111.0}, {"name": "GPT-6 Astra", "kind": "api", "params": null, "bstrb_video_f1": 0.709, "ttft_s": 9.8463, "s_per_token": 0.0138, "latency_s": 10.3472, "tokens": 17.0, "cost_per_1k_frames_usd": 23.83, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.2147, "demo_wir": 0.2049, "demo_fuzzy_f1": 0.2226, "reasoning_tokens": 269.0}, {"name": "GPT-5", "kind": "api", "params": null, "bstrb_video_f1": 0.649, "ttft_s": 11.0027, "s_per_token": null, "latency_s": 11.0052, "tokens": 14.0, "cost_per_1k_frames_usd": 11.15, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.1566, "demo_wir": 0.1243, "demo_fuzzy_f1": 0.1869, "reasoning_tokens": 832.0}, {"name": "Claude Opus 5.5", "kind": "api", "params": null, "bstrb_video_f1": null, "ttft_s": 1.3306, "s_per_token": 0.0048, "latency_s": 1.6731, "tokens": 15.5, "cost_per_1k_frames_usd": 4.95, "n": 70, "errors": 0, "decode_tok_s": 153.7, "demo_bow_f1": 0.1589, "demo_wir": 0.1254, "demo_fuzzy_f1": 0.212, "reasoning_tokens": 21.0}]}</script>
 
 <!-- ============================== Attention ============================== -->
 <section class="section alt">
