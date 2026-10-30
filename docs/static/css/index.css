@@ -369,7 +369,8 @@ table.heat td.hm-na { color: var(--ink-3); }
 table.snx-rows td, table.snx-rows th { text-align: left; }
 table.snx-rows tr.hl td { color: var(--ink); font-weight: 650; background: var(--accent-soft); }
 table.snx-read td.mono { white-space: nowrap; }
-.ch.bad { color: var(--bad); font-weight: 700; }
+.ch.bad { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--bad); }
+.ch.bad.miss { text-decoration: none; }
 .ch.miss { opacity: .85; }
 @media (max-width: 860px) { .snx-split { grid-template-columns: 1fr; } .snx-fig img { max-height: 380px; } }
 @media (max-width: 520px) { .seg.seg-sm { display: inline-flex; width: auto; } .seg.seg-sm .seg-btn { font-size: .78rem; padding: .3rem .55rem; } }
