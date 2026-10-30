@@ -16,6 +16,9 @@
    "cost_per_1k_frames_usd": 0.26,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.3235,
+   "demo_wir": 0.2476,
+   "demo_fuzzy_f1": 0.3318,
    "vram_gb": 8.6,
    "tflops_per_crop": 7.0,
    "gpu_hours_per_1k": 0.326
@@ -32,6 +35,9 @@
    "cost_per_1k_frames_usd": 0.24,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2768,
+   "demo_wir": 0.2338,
+   "demo_fuzzy_f1": 0.2909,
    "vram_gb": 16.7,
    "tflops_per_crop": 13.9,
    "gpu_hours_per_1k": 0.298
@@ -48,6 +54,9 @@
    "cost_per_1k_frames_usd": 0.26,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2264,
+   "demo_wir": 0.1892,
+   "demo_fuzzy_f1": 0.2356,
    "vram_gb": 8.4,
    "tflops_per_crop": 2.2,
    "gpu_hours_per_1k": 0.33
@@ -64,6 +73,9 @@
    "cost_per_1k_frames_usd": 0.22,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2209,
+   "demo_wir": 0.1923,
+   "demo_fuzzy_f1": 0.2287,
    "vram_gb": 16.5,
    "tflops_per_crop": 4.3,
    "gpu_hours_per_1k": 0.276
@@ -80,6 +92,9 @@
    "cost_per_1k_frames_usd": 0.19,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.236,
+   "demo_wir": 0.1909,
+   "demo_fuzzy_f1": 0.265,
    "reasoning_tokens": 0.0
   },
   {
@@ -94,6 +109,9 @@
    "cost_per_1k_frames_usd": 12.49,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2313,
+   "demo_wir": 0.186,
+   "demo_fuzzy_f1": 0.2678,
    "reasoning_tokens": 2926.0
   },
   {
@@ -108,6 +126,9 @@
    "cost_per_1k_frames_usd": 17.92,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2137,
+   "demo_wir": 0.1898,
+   "demo_fuzzy_f1": 0.2311,
    "reasoning_tokens": 241.5
   },
   {
@@ -122,6 +143,9 @@
    "cost_per_1k_frames_usd": 11.85,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2674,
+   "demo_wir": 0.1932,
+   "demo_fuzzy_f1": 0.2869,
    "reasoning_tokens": 1056.0
   },
   {
@@ -136,6 +160,9 @@
    "cost_per_1k_frames_usd": 3.05,
    "n": 64,
    "errors": 0,
+   "demo_bow_f1": 0.2185,
+   "demo_wir": 0.1591,
+   "demo_fuzzy_f1": 0.273,
    "reasoning_tokens": 37.5
   }
  ]
