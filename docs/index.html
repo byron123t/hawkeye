@@ -77,25 +77,41 @@
   </div>
 </section>
 
-<!-- ============================== Key results ============================== -->
+<!-- ============================== Results at a glance ============================== -->
 <section class="section alt">
   <div class="wrap">
-    <h2>Key Results</h2>
-    <div class="cards">
-      <article class="card">
-        <div class="card-num">+10.1</div>
-        <h3>Improvement over the base model</h3>
-        <p>Bag-of-words F1 on held-out BSTRB video frames, Hawkeye 4B versus Qwen3-VL-4B (0.627 &rarr; 0.728). Hawkeye 8B improves on Qwen3-VL-8B by 6.9 points.</p>
+    <h2>Results at a Glance</h2>
+    <p class="lede">Held-out results from the paper. Differences are paired against each model&rsquo;s own Qwen3-VL base, with clustered bootstrap confidence intervals and Holm correction.</p>
+    <div class="glance">
+      <article class="tile">
+        <div class="tile-num">+10.1<span class="unit">pp</span></div>
+        <div class="tile-lbl">BSTRB video, Hawkeye 4B vs. base</div>
+        <div class="tile-sub">BoW F1 0.627 &rarr; 0.728; Hawkeye 8B +6.9&nbsp;pp. Photos: +6.0 and +5.3&nbsp;pp.</div>
       </article>
-      <article class="card">
-        <div class="card-num">0.744</div>
-        <h3>Comparison with larger models</h3>
-        <p>BoW F1 of Hawkeye 8B on BSTRB video frames, the highest of the 24 models evaluated, including Qwen3-VL-235B (0.726), Kimi K2.6 (0.723) and GPT-6 Astra (0.709).</p>
+      <article class="tile">
+        <div class="tile-num">0.744</div>
+        <div class="tile-lbl">Highest BSTRB video score of 24 models</div>
+        <div class="tile-sub">Hawkeye 8B, ahead of Qwen3-VL-235B (0.726), Kimi K2.6 (0.723) and GPT-6 Astra (0.709).</div>
       </article>
-      <article class="card">
-        <div class="card-num">0 / 10</div>
-        <h3>General OCR benchmarks</h3>
-        <p>Number of general OCR benchmarks on which either Hawkeye model shows a statistically significant decrease in BoW F1 relative to its base model.</p>
+      <article class="tile">
+        <div class="tile-num">+13.0<span class="unit">pp</span></div>
+        <div class="tile-lbl">Word inclusion on smart-glasses captures</div>
+        <div class="tile-sub">Hawkeye 8B vs. base on 37 objects captured with Meta Ray-Ban glasses.</div>
+      </article>
+      <article class="tile">
+        <div class="tile-num">+7.2<span class="unit">pp</span></div>
+        <div class="tile-lbl">Snellen rows of 7&nbsp;px or smaller</div>
+        <div class="tile-sub">Hawkeye 4B vs. base on 50 charts; Hawkeye 8B +7.5&nbsp;pp.</div>
+      </article>
+      <article class="tile">
+        <div class="tile-num">0<span class="unit">/ 10</span></div>
+        <div class="tile-lbl">General OCR benchmarks with a decrease</div>
+        <div class="tile-sub">No significant BoW F1 decrease relative to the base model at either size.</div>
+      </article>
+      <article class="tile">
+        <div class="tile-num">14.3% <span class="arrow">&rarr;</span> 7.2%</div>
+        <div class="tile-lbl">Repetition loops on text of 20&nbsp;px or less</div>
+        <div class="tile-sub">Hawkeye 4B vs. base on BSTRB video; 8B: 8.5% &rarr; 5.2%.</div>
       </article>
     </div>
   </div>
@@ -105,29 +121,39 @@
 <section class="section">
   <div class="wrap">
     <h2>The BSTRB Benchmark</h2>
-    <p class="lede">BSTRB consists of smartphone recordings of everyday objects (packaging, books, medicine, signage and screens), each recorded while the camera moves away from the object. Six frames are sampled per recording, so that a single transcription is paired with text whose height decreases from roughly 20&nbsp;px to below 5&nbsp;px. Transcriptions in the validation and test splits were verified by hand.</p>
+    <p class="lede">Smartphone recordings of everyday objects, each captured while the camera moves away, so that one transcription is paired with text that shrinks from roughly 20&nbsp;px to below 5&nbsp;px.</p>
     <figure class="fig">
       <img src="static/images/frames.webp" alt="Six frames from one BSTRB video: a box of text shrinks from 19.6 px to 4.5 px mean text height as the camera moves away; a VLM's transcription errors grow from 0 to over 45." loading="lazy">
       <figcaption>Six frames from one recording. Mean text height decreases from 19.6&nbsp;px to 4.5&nbsp;px, and the number of transcription errors by GPT-5.2 increases from 0 to more than 45.</figcaption>
     </figure>
+    <div class="split">
+      <div class="split-main">
+        <div class="table-wrap">
+          <table class="res">
+            <thead><tr><th>Split</th><th>Video frames</th><th>Videos</th><th>Photos</th><th class="txt">Labels</th></tr></thead>
+            <tbody>
+              <tr><td>train</td><td>6,704</td><td>1,128</td><td>695</td><td class="txt">automatic (GPT-5)</td></tr>
+              <tr><td>validation</td><td>333</td><td>56</td><td>36</td><td class="txt">human-verified</td></tr>
+              <tr><td>test</td><td>1,325</td><td>223</td><td>241</td><td class="txt">human-verified</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <ul class="facts">
+        <li><b>Objects.</b> Packaging, books, medicine, signage and screens, recorded at home.</li>
+        <li><b>Sampling.</b> Six frames per recording, one transcription per recording.</li>
+        <li><b>Splits.</b> No recording appears in more than one split; validation was used for model selection.</li>
+        <li><b>Privacy.</b> Neutral file identifiers, image metadata removed, gated access with a data-use agreement.</li>
+      </ul>
+    </div>
     <figure class="fig">
       <img src="static/images/dataset_grid.webp" alt="Grid of held-out BSTRB clips, one object per row, at six frame positions, each labelled with its median text height." loading="lazy">
       <figcaption>Held-out recordings at the six sampled frame positions, with the median text height of each frame.</figcaption>
     </figure>
-    <div class="table-wrap">
-      <table class="res">
-        <thead><tr><th>Split</th><th>Video frames</th><th>Videos</th><th>Photos</th><th class="txt">Labels</th></tr></thead>
-        <tbody>
-          <tr><td>train</td><td>6,704</td><td>1,128</td><td>695</td><td class="txt">automatic (GPT-5)</td></tr>
-          <tr><td>validation</td><td>333</td><td>56</td><td>36</td><td class="txt">human-verified</td></tr>
-          <tr><td>test</td><td>1,325</td><td>223</td><td>241</td><td class="txt">human-verified</td></tr>
-        </tbody>
-      </table>
-    </div>
     <details class="more">
-      <summary>Dataset details</summary>
+      <summary>Composition and text density</summary>
       <div class="more-body">
-        <p>No recording appears in more than one split. The validation split was used for model selection; all reported results are on the held-out test split. Files are identified by neutral identifiers, image metadata (including location) has been removed, and access is gated by a data-use agreement. Automatic training labels for photographs are frequently incomplete; Hawkeye is therefore trained on video frames only.</p>
+        <p>Automatic training labels for photographs are frequently incomplete; Hawkeye is therefore trained on video frames only.</p>
         <div class="fig-pair">
           <figure class="fig"><img src="static/images/dataset_composition_v2.webp" alt="Bar charts of object, scene and text categories in BSTRB." loading="lazy"><figcaption>Composition by object, scene and text category.</figcaption></figure>
           <figure class="fig"><img src="static/images/text_density_compare.webp" alt="Words per image for BSTRB and other OCR benchmarks." loading="lazy"><figcaption>Words per image in BSTRB and in other OCR benchmarks.</figcaption></figure>
@@ -141,41 +167,40 @@
 <section class="section alt">
   <div class="wrap">
     <h2>Results</h2>
-    <p class="lede">The improvement over the base model is largest for text below 20&nbsp;px. On video frames, Hawkeye 8B attains the highest BoW F1 among the evaluated models.</p>
+    <p class="lede">The improvement over the base model is largest for text below 20&nbsp;px; on video frames, Hawkeye 8B attains the highest BoW F1 of the evaluated models.</p>
     <figure class="fig">
       <img src="static/images/bstrb_split_bow_f1.webp" alt="BoW F1 on held-out BSTRB video by text height, split at 20 px. Left: Hawkeye vs. its base. Right: Hawkeye vs. the strongest API models." loading="lazy">
       <figcaption>BoW F1 by mean text height on held-out BSTRB video frames. Left: Hawkeye and its base model. Right: Hawkeye and the strongest API models.</figcaption>
     </figure>
-    <div class="stats">
-      <div class="stat"><div class="num">0</div><div class="lbl">significant decreases on ten general OCR benchmarks, at either model size</div></div>
-      <div class="stat"><div class="num">+13.0</div><div class="lbl">points of word inclusion on 37 objects captured with Meta Ray-Ban smart glasses (Hawkeye 8B)</div></div>
-      <div class="stat"><div class="num">14.3% &rarr; 7.2%</div><div class="lbl">repetition loops on text of 20&nbsp;px or less (Hawkeye 4B)</div></div>
+    <div class="table-wrap">
+      <table class="res compact">
+        <thead><tr><th>Benchmark (held-out)</th><th class="txt">Hawkeye 4B &minus; Qwen3-VL-4B</th><th class="txt">Hawkeye 8B &minus; Qwen3-VL-8B</th></tr></thead>
+        <tbody>
+          <tr><td>BSTRB video, BoW F1</td><td class="up txt">+10.1 pp (.627 &rarr; .728)</td><td class="up txt">+6.9 pp (.675 &rarr; .744)</td></tr>
+          <tr><td>BSTRB photos, BoW F1 (241)</td><td class="up txt">+6.0 pp</td><td class="up txt">+5.3 pp</td></tr>
+          <tr><td>10 general OCR sets, BoW F1</td><td class="txt">4 better, 6 n.s., 0 worse</td><td class="txt">2 better, 8 n.s., 0 worse</td></tr>
+          <tr><td>Smart-glasses captures (37 objects)</td><td class="txt">BoW F1 +14.7, aligned F1 +16.6 pp; word inclusion n.s.</td><td class="up txt">word inclusion +13.0, BoW F1 +11.5, aligned F1 +12.3 pp</td></tr>
+          <tr><td>Snellen charts, text &le;7 px (50 charts)</td><td class="up txt">+7.2 pp</td><td class="up txt">+7.5 pp</td></tr>
+          <tr><td>Repetition loops, BSTRB video &le;20 px</td><td class="up txt">14.3% &rarr; 7.2%</td><td class="up txt">8.5% &rarr; 5.2%</td></tr>
+        </tbody>
+      </table>
     </div>
+    <p class="note">Highlighted cells are significant. pp: percentage points.</p>
     <details class="more">
       <summary>Additional results and statistical methodology</summary>
       <div class="more-body">
+        <ul class="defs">
+          <li><b>Test set.</b> Results as reported in the paper, on the full held-out video set (1,331 frames, 224 videos).</li>
+          <li><b>Public split.</b> One video is omitted for privacy reasons, which changes every score by at most 0.001.</li>
+          <li><b>Statistics.</b> Paired bootstrap, clustered by video (BSTRB), object (smart-glasses captures) or chart (Snellen), with Holm correction.</li>
+        </ul>
         <figure class="fig">
           <img src="static/images/heatmap_bow_f1.webp" alt="Heatmap of BoW F1 for 20 API models, the Qwen3-VL bases and Hawkeye across 10 OCR datasets and held-out BSTRB." loading="lazy">
           <figcaption>BoW F1 of 20 API models, the Qwen3-VL base models and Hawkeye on ten OCR datasets and held-out BSTRB. Boxes mark the best model per dataset.</figcaption>
         </figure>
-        <div class="table-wrap">
-          <table class="res">
-            <thead><tr><th>Benchmark (held-out)</th><th class="txt">Hawkeye 4B &minus; Qwen3-VL-4B</th><th class="txt">Hawkeye 8B &minus; Qwen3-VL-8B</th></tr></thead>
-            <tbody>
-              <tr><td>BSTRB video, BoW F1</td><td class="up txt">+10.1 pp (.627 &rarr; .728)</td><td class="up txt">+6.9 pp (.675 &rarr; .744)</td></tr>
-              <tr><td>BSTRB photos, BoW F1 (241)</td><td class="up txt">+6.0 pp</td><td class="up txt">+5.3 pp</td></tr>
-              <tr><td>10 general OCR sets, BoW F1</td><td class="txt">4 better, 6 n.s., 0 worse</td><td class="txt">2 better, 8 n.s., 0 worse</td></tr>
-              <tr><td>Smart-glasses captures (37 objects)</td><td class="txt">BoW F1 +14.7, aligned F1 +16.6 pp; word inclusion n.s.</td><td class="up txt">word inclusion +13.0, BoW F1 +11.5, aligned F1 +12.3 pp</td></tr>
-              <tr><td>Snellen charts, text &le;7 px (50 charts)</td><td class="up txt">+7.2 pp</td><td class="up txt">+7.5 pp</td></tr>
-              <tr><td>Repetition loops, BSTRB video &le;20 px</td><td class="up txt">14.3% &rarr; 7.2%</td><td class="up txt">8.5% &rarr; 5.2%</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="note">Results as reported in the paper on the full held-out video set (1,331 frames, 224 videos); the public test split omits one video for privacy reasons, which changes every score by at most 0.001. Paired bootstrap confidence intervals, clustered by video (BSTRB), object (smart-glasses captures) or chart (Snellen), with Holm correction; highlighted cells are significant. pp: percentage points.</p>
         <div class="fig-pair">
           <figure class="fig"><img src="static/images/forest_vs_base.webp" alt="Forest plot of Hawkeye minus base BoW F1 per dataset with 95% CIs, for 4B and 8B." loading="lazy"><figcaption>Per-dataset difference from the base model with 95% confidence intervals; filled markers are significant.</figcaption></figure>
           <figure class="fig"><img src="static/images/ood_metrics.webp" alt="Word inclusion, BoW F1 and aligned F1 for base Qwen3-VL-8B and Hawkeye 8B on smart-glasses captures." loading="lazy"><figcaption>Smart-glasses captures (37 objects): Hawkeye 8B and Qwen3-VL-8B.</figcaption></figure>
-          <figure class="fig"><img src="static/images/snellen_accuracy_vs_distance.webp" alt="Character accuracy on Snellen charts versus text height." loading="lazy"><figcaption>Character accuracy on Snellen charts by text height. Most models remain accurate down to about 5&nbsp;px; at 4&nbsp;px Hawkeye 4B is the most accurate of the models shown.</figcaption></figure>
           <figure class="fig"><img src="static/images/ocr_vs_vlm.webp" alt="BoW F1 of OCR engines and VLMs on BSTRB." loading="lazy"><figcaption>Conventional OCR engines and VLMs on BSTRB video frames.</figcaption></figure>
         </div>
       </div>
@@ -183,43 +208,84 @@
   </div>
 </section>
 
+<!-- ============================== Snellen ============================== -->
+<section class="section" id="snellen">
+  <div class="wrap">
+    <h2>Small Text: Snellen Charts</h2>
+    <p class="lede">On clean, synthetic Snellen-style charts, models diverge at 7&nbsp;px and below: Hawkeye improves over its base by 7.2&nbsp;pp (4B, 95% CI 4.5&ndash;9.9) and 7.5&nbsp;pp (8B, 4.7&ndash;10.2) on these rows.</p>
+    <div class="split snellen-split">
+      <div class="split-main">
+        <div class="chart-card">
+          <div id="snellen-chart" class="chart line-chart" aria-describedby="snellen-desc"></div>
+          <div class="legend" id="snellen-legend"></div>
+        </div>
+      </div>
+      <div class="side">
+        <ul class="facts">
+          <li><b>At 4&nbsp;px.</b> Hawkeye 4B reads 0.48 of characters, against 0.24 for its base and 0.27&ndash;0.40 for the API models shown.</li>
+          <li><b>From 5&nbsp;px.</b> Most models are near ceiling; there the base 4B is slightly above Hawkeye 4B (0.976 vs. 0.947).</li>
+        </ul>
+        <div class="table-wrap">
+          <table class="res compact" id="snellen-tests">
+            <thead><tr><th>Rows</th><th>4B<span class="th-sub">&Delta; pp [95% CI]</span></th><th>8B<span class="th-sub">&Delta; pp [95% CI]</span></th></tr></thead>
+            <tbody><tr><td colspan="3" class="muted">Loading.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p class="note" id="snellen-desc">Character accuracy per row on 50 charts, by optotype height; Hawkeye minus base, paired and clustered by chart, Holm-corrected. Hover or focus a height for exact values.</p>
+  </div>
+</section>
+<script id="snellen-data" type="application/json">{"note": "Character accuracy per row of 50 Snellen-style charts by optotype height; 95% bootstrap CIs over charts. Paired differences are chart-clustered with Holm correction.", "models": [{"name": "Hawkeye 4B", "kind": "local", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.4762, 0.9472, 0.9833, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.4107, 0.9072, 0.9567, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.5331, 0.9643, 0.9933, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Hawkeye 8B", "kind": "local", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.5368, 0.9329, 0.9683, 0.9925, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.4725, 0.8824, 0.9317, 0.9625, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.5941, 0.96, 0.9817, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.2396, 0.9757, 0.9767, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.202, 0.9643, 0.9667, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.28, 0.9843, 0.9867, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.2917, 0.9557, 0.9667, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.2463, 0.9106, 0.9533, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.335, 0.9714, 0.9767, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Qwen3-VL-235B", "kind": "api", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.2853, 0.9657, 0.985, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.228, 0.9543, 0.975, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.3486, 0.9757, 0.9917, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Kimi K2.6", "kind": "api", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.3982, 0.94, 0.95, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.3424, 0.8582, 0.8648, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.4545, 0.9629, 0.9717, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "GPT-6 Astra", "kind": "api", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.2733, 0.925, 0.9833, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.236, 0.8942, 0.9717, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.324, 0.9357, 0.99, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "GPT-5", "kind": "api", "height_px": [4.0, 5.0, 7.0, 9.0, 11.0, 13.0, 25.0, 38.0, 48.0], "mean": [0.1113, 0.8243, 0.94, 0.985, 1.0, 1.0, 1.0, 1.0, 1.0], "lo": [0.08, 0.7356, 0.8601, 0.925, 1.0, 1.0, 1.0, 1.0, 1.0], "hi": [0.1463, 0.8818, 0.9617, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}], "tests": [{"size": "4b", "band": "<=7px", "hawkeye": 0.8022, "base": 0.7307, "diff_pp": 7.15, "lo_pp": 4.5, "hi_pp": 9.87, "p_holm": 0.0006}, {"size": "4b", "band": "<=13px", "hawkeye": 0.9011, "base": 0.8653, "diff_pp": 3.58, "lo_pp": 2.26, "hi_pp": 4.94, "p_holm": 0.0006}, {"size": "4b", "band": "all rows", "hawkeye": 0.9341, "base": 0.9102, "diff_pp": 2.38, "lo_pp": 1.49, "hi_pp": 3.28, "p_holm": 0.0006}, {"size": "8b", "band": "<=7px", "hawkeye": 0.8127, "base": 0.738, "diff_pp": 7.46, "lo_pp": 4.68, "hi_pp": 10.18, "p_holm": 0.0006}, {"size": "8b", "band": "<=13px", "hawkeye": 0.9051, "base": 0.869, "diff_pp": 3.61, "lo_pp": 2.1, "hi_pp": 5.06, "p_holm": 0.0006}, {"size": "8b", "band": "all rows", "hawkeye": 0.9367, "base": 0.9127, "diff_pp": 2.4, "lo_pp": 1.41, "hi_pp": 3.38, "p_holm": 0.0006}]}</script>
+
 <!-- ============================== Latency and cost ============================== -->
-<section class="section" id="speed">
+<section class="section alt" id="speed">
   <div class="wrap">
     <h2>Latency and Cost</h2>
-    <p class="lede" id="speed-lede">Latency, memory, compute and cost on the 70 crops of the demonstration recordings, with all
-      models given identical inputs. On a single local GPU (8.7&nbsp;GB of memory for the 4B model and 16.7&nbsp;GB for the 8B model),
-      Hawkeye has a median latency below one second per crop, comparable to Qwen3-VL-235B served through an API and 10&ndash;13 times
-      lower than the reasoning API models. Repetition loops on dense text increase the mean GPU time, which determines the local
-      cost.</p>
-    <div id="speed-chart" class="chart"></div>
+    <p class="lede" id="speed-lede">On one local GPU, Hawkeye reads a crop in under a second (median), comparable to Qwen3-VL-235B served through an API and 10&ndash;13 times faster than the reasoning API models.</p>
+    <div class="chart-card">
+      <div id="speed-chart" class="chart"></div>
+    </div>
+    <div class="assumptions" role="group" aria-label="Cost assumptions">
+      <span class="assumptions-title">Assumptions</span>
+      <label>GPU rental (RTX 6000 Ada) <span class="inp">$<input id="gpu-price" type="number" min="0" step="0.05" inputmode="decimal" aria-label="GPU rental price in US dollars per hour"></span> per hour</label>
+      <label>Reading rate <span class="inp"><input id="reads-per-s" type="number" min="0" step="0.5" value="1" inputmode="decimal" aria-label="Reads per second"></span> crops per second</label>
+      <label>Use <span class="inp"><input id="hours-per-day" type="number" min="0" max="24" step="1" value="16" inputmode="decimal" aria-label="Hours of use per day"></span> hours per day</label>
+    </div>
     <div class="table-wrap">
       <table class="res" id="speed-table">
         <thead><tr>
           <th>Model</th><th>Accuracy<span class="th-sub">BSTRB video BoW F1</span></th>
-          <th>VRAM<span class="th-sub">peak, GB</span></th><th>Compute<span class="th-sub">TFLOPs per crop</span></th>
+          <th>VRAM<span class="th-sub">peak, GB</span></th><th>Price per 1M tokens<span class="th-sub">USD, input / output</span></th>
           <th>First token<span class="th-sub">seconds</span></th><th>Decode speed<span class="th-sub">tokens per second</span></th>
           <th>Latency<span class="th-sub">seconds per crop</span></th><th>Cost<span class="th-sub">USD per 1,000 crops</span></th><th>Cost per day<span class="th-sub">USD, continuous use</span></th>
         </tr></thead>
         <tbody><tr><td colspan="9" class="muted">Measurements are being added.</td></tr></tbody>
       </table>
     </div>
-    <p class="note price-row">* Local cost is the mean GPU time per crop multiplied by an assumed rental price for one RTX 6000 Ada of
-      <label>$<input id="gpu-price" type="number" min="0" step="0.05" inputmode="decimal" aria-label="GPU rental price in US dollars per hour" style="width:4.5em"> per hour</label>.
-      API cost is computed from token counts and list prices. Cost per day assumes continuous reading on smart glasses at
-      <label><input id="reads-per-s" type="number" min="0" step="0.5" value="1" inputmode="decimal" aria-label="Reads per second" style="width:3.5em"> read(s) per second</label>
-      for <label><input id="hours-per-day" type="number" min="0" max="24" step="1" value="16" inputmode="decimal" aria-label="Hours of use per day" style="width:3.5em"> hours per day</label>;
-      all three values can be edited. For local models it is the GPU time actually used; reading at more than about one crop per
-      second requires a second GPU.</p>
-    <p class="note" id="speed-note"></p>
-    <h3 class="subhead">Accuracy on the demonstration recordings</h3>
-    <p class="lede">The same 70 crops scored against reference transcriptions of the eight labelled objects: the tea bag, honey,
-      Lysol, Bounty and Band-Aid packages (transcribed by the authors), and a book, a supplement label and a web page (the agreement
-      of GPT-6 Astra and Claude Opus 5.5 on close-up photographs, keeping only words that both read). Because word order on a
-      package is arbitrary, only order-independent metrics are reported, each computed per crop and averaged over crops:
-      bag-of-words F1, word inclusion rate, and an edit-tolerant bag-of-words F1, in which a word matches an unmatched reference
-      word if their normalized edit distance is at most 0.2, and a word split or merged at one space (e.g. &ldquo;Sue Bee&rdquo;
-      and &ldquo;SueBee&rdquo;) counts as a single match.</p>
+    <p class="note">* Local models: GPU rental price divided by measured throughput at batch size 1 (batching lowers per-token and per-crop cost). API models: list prices.</p>
+    <details class="more">
+      <summary>Measurement details</summary>
+      <div class="more-body">
+        <dl class="defs-list">
+          <dt>Inputs</dt><dd>70 crops from the demonstration recordings; every model receives identical inputs.</dd>
+          <dt>Local models</dt><dd>One NVIDIA RTX 6000 Ada, batch size 1, Hugging Face transformers, bfloat16.</dd>
+          <dt>API models</dt><dd>Streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper.</dd>
+          <dt>Latency</dt><dd>Medians per crop; hidden reasoning tokens are included in API latency and cost.</dd>
+          <dt>First token</dt><dd>Where an API returns the response in a single chunk, it equals total latency and no decode speed is given.</dd>
+          <dt>Decode speed</dt><dd>Generated tokens after the first, divided by the time after the first token, pooled over crops.</dd>
+          <dt>Price per token</dt><dd>Local input: GPU price / prefill throughput; local output: GPU price / decode throughput.</dd>
+          <dt>Cost</dt><dd>Local: mean GPU time per crop &times; GPU price. API: token counts &times; list prices (October 2026).</dd>
+          <dt>Cost per day</dt><dd>Reading rate &times; hours per day; above about one crop per second a second GPU is needed.</dd>
+          <dt>Repetition loops</dt><dd>Loops on dense text raise the mean GPU time, and hence the local cost, above what the median latency suggests.</dd>
+          <dt>VRAM</dt><dd>Peak allocated GPU memory: 8.7&nbsp;GB for the 4B models, 16.7&nbsp;GB for the 8B models.</dd>
+          <dt>Accuracy</dt><dd>BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation.</dd>
+        </dl>
+      </div>
+    </details>
+
+    <h3 class="subhead">Accuracy on the Demonstration Recordings</h3>
+    <p class="lede">The same 70 crops, scored against reference transcriptions of the eight recorded objects with order-independent metrics averaged over crops.</p>
     <div class="table-wrap">
       <table class="res">
         <thead><tr><th>Model</th><th>BoW F1</th><th>Word inclusion</th><th>Edit-tolerant BoW F1</th></tr></thead>
@@ -238,20 +304,30 @@
         </tbody>
       </table>
     </div>
-    <p class="note">Each reference covers the whole package, while a crop usually shows only part of it, which bounds recall
-      equally for all models. Crops were assigned to products by inspection. With eight objects and 70 crops, these figures
-      illustrate the demonstration and are not a benchmark result; see the BSTRB results above.</p>
+    <details class="more">
+      <summary>Scoring details</summary>
+      <div class="more-body">
+        <ul class="defs">
+          <li><b>References.</b> Tea bag, honey, Lysol, Bounty and Band-Aid packages: transcribed by the authors.</li>
+          <li><b>References.</b> Book, supplement label and web page: words read by both GPT-6 Astra and Claude Opus 5.5 on close-up photographs.</li>
+          <li><b>Edit-tolerant F1.</b> A word matches an unmatched reference word at normalized edit distance &le;&nbsp;0.2.</li>
+          <li><b>Splits and merges.</b> A word split or merged at one space (&ldquo;Sue Bee&rdquo; / &ldquo;SueBee&rdquo;) counts as one match.</li>
+          <li><b>Recall bound.</b> Each reference covers the whole object, while a crop usually shows part of it, equally for all models.</li>
+          <li><b>Scope.</b> Crops were assigned to objects by inspection; eight objects and 70 crops illustrate the demonstration and are not a benchmark result.</li>
+        </ul>
+      </div>
+    </details>
   </div>
 </section>
 <!-- Speed data: paste the contents of static/data/speed.json here. When non-empty it is used
      instead of fetching the file, so the page also works when opened straight from disk. -->
-<script id="speed-data" type="application/json">{"note": "Medians per crop. Local models: batch size 1, Hugging Face transformers, bfloat16. API models: streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper; hidden reasoning tokens are included in latency and cost. Cost is computed from token counts and list prices (October 2026). Accuracy is BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation. Where an API returns the response in a single chunk, first-token latency equals total latency and no decode speed is given. Decode speed is the number of generated tokens after the first divided by the time after the first token, pooled over crops. Local cost = mean GPU time per crop x the GPU rental price above; VRAM is peak allocated memory; TFLOPs are estimated as 2 x parameters x tokens processed.", "frames": 70, "gpu": "NVIDIA RTX 6000 Ada Generation", "gpu_price_usd_per_h": 0.8, "models": [{"name": "Hawkeye 4B", "kind": "local", "params": "4B", "bstrb_video_f1": 0.728, "ttft_s": 0.4822, "s_per_token": 0.0208, "latency_s": 0.9893, "tokens": 26.5, "cost_per_1k_frames_usd": 1.85, "n": 70, "errors": 0, "decode_tok_s": 45.3, "demo_bow_f1": 0.273, "demo_wir": 0.2308, "demo_fuzzy_f1": 0.2819, "vram_gb": 8.7, "tflops_per_crop": 9.9, "gpu_hours_per_1k": 2.308}, {"name": "Hawkeye 8B", "kind": "local", "params": "8B", "bstrb_video_f1": 0.744, "ttft_s": 0.5605, "s_per_token": 0.021, "latency_s": 0.8723, "tokens": 17.0, "cost_per_1k_frames_usd": 1.51, "n": 70, "errors": 0, "decode_tok_s": 45.1, "demo_bow_f1": 0.2531, "demo_wir": 0.2413, "demo_fuzzy_f1": 0.267, "vram_gb": 16.7, "tflops_per_crop": 19.4, "gpu_hours_per_1k": 1.89}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "params": "4B", "bstrb_video_f1": 0.627, "ttft_s": 0.3926, "s_per_token": 0.0215, "latency_s": 0.8464, "tokens": 17.0, "cost_per_1k_frames_usd": 1.71, "n": 70, "errors": 0, "decode_tok_s": 42.1, "demo_bow_f1": 0.1761, "demo_wir": 0.1728, "demo_fuzzy_f1": 0.1836, "vram_gb": 8.7, "tflops_per_crop": 3.9, "gpu_hours_per_1k": 2.143}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "params": "8B", "bstrb_video_f1": 0.675, "ttft_s": 0.4652, "s_per_token": 0.0204, "latency_s": 0.7112, "tokens": 12.5, "cost_per_1k_frames_usd": 1.29, "n": 70, "errors": 0, "decode_tok_s": 46.0, "demo_bow_f1": 0.1895, "demo_wir": 0.187, "demo_fuzzy_f1": 0.1971, "vram_gb": 16.7, "tflops_per_crop": 7.5, "gpu_hours_per_1k": 1.616}, {"name": "Qwen3-VL-235B", "kind": "api", "params": "235B (22B active)", "bstrb_video_f1": 0.726, "ttft_s": 0.888, "s_per_token": null, "latency_s": 0.9778, "tokens": 12.5, "cost_per_1k_frames_usd": 1.02, "n": 70, "errors": 0, "decode_tok_s": 66.1, "demo_bow_f1": 0.1861, "demo_wir": 0.1624, "demo_fuzzy_f1": 0.213, "reasoning_tokens": 0.0}, {"name": "Kimi K2.6", "kind": "api", "params": null, "bstrb_video_f1": 0.723, "ttft_s": 9.2841, "s_per_token": null, "latency_s": 9.5236, "tokens": 9.5, "cost_per_1k_frames_usd": 11.81, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.1904, "demo_wir": 0.1751, "demo_fuzzy_f1": 0.2218, "reasoning_tokens": 2111.0}, {"name": "GPT-6 Astra", "kind": "api", "params": null, "bstrb_video_f1": 0.709, "ttft_s": 9.8463, "s_per_token": 0.0138, "latency_s": 10.3472, "tokens": 17.0, "cost_per_1k_frames_usd": 23.83, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.2147, "demo_wir": 0.2049, "demo_fuzzy_f1": 0.2226, "reasoning_tokens": 269.0}, {"name": "GPT-5", "kind": "api", "params": null, "bstrb_video_f1": 0.649, "ttft_s": 11.0027, "s_per_token": null, "latency_s": 11.0052, "tokens": 14.0, "cost_per_1k_frames_usd": 11.15, "n": 70, "errors": 0, "decode_tok_s": null, "demo_bow_f1": 0.1566, "demo_wir": 0.1243, "demo_fuzzy_f1": 0.1869, "reasoning_tokens": 832.0}, {"name": "Claude Opus 5.5", "kind": "api", "params": null, "bstrb_video_f1": null, "ttft_s": 1.3306, "s_per_token": 0.0048, "latency_s": 1.6731, "tokens": 15.5, "cost_per_1k_frames_usd": 4.95, "n": 70, "errors": 0, "decode_tok_s": 153.7, "demo_bow_f1": 0.1589, "demo_wir": 0.1254, "demo_fuzzy_f1": 0.212, "reasoning_tokens": 21.0}]}</script>
+<script id="speed-data" type="application/json">{"note": "Medians per crop. Local models: batch size 1, Hugging Face transformers, bfloat16. API models: streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper; hidden reasoning tokens are included in latency and cost. Cost is computed from token counts and list prices (October 2026). Accuracy is BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation. Where an API returns the response in a single chunk, first-token latency equals total latency and no decode speed is given. Decode speed is the number of generated tokens after the first divided by the time after the first token, pooled over crops. Local cost = mean GPU time per crop x the GPU rental price above; VRAM is peak allocated memory; TFLOPs are estimated as 2 x parameters x tokens processed.", "frames": 70, "gpu": "NVIDIA RTX 6000 Ada Generation", "gpu_price_usd_per_h": 0.8, "models": [{"name": "Hawkeye 4B", "kind": "local", "params": "4B", "bstrb_video_f1": 0.728, "ttft_s": 0.4822, "s_per_token": 0.0208, "latency_s": 0.9893, "tokens": 26.5, "cost_per_1k_frames_usd": 1.85, "n": 70, "errors": 0, "decode_tok_s": 45.3, "prefill_tok_s": 920.3, "demo_bow_f1": 0.273, "demo_wir": 0.2308, "demo_fuzzy_f1": 0.2819, "vram_gb": 8.7, "tflops_per_crop": 9.9, "gpu_hours_per_1k": 2.308}, {"name": "Hawkeye 8B", "kind": "local", "params": "8B", "bstrb_video_f1": 0.744, "ttft_s": 0.5605, "s_per_token": 0.021, "latency_s": 0.8723, "tokens": 17.0, "cost_per_1k_frames_usd": 1.51, "n": 70, "errors": 0, "decode_tok_s": 45.1, "prefill_tok_s": 862.3, "demo_bow_f1": 0.2531, "demo_wir": 0.2413, "demo_fuzzy_f1": 0.267, "vram_gb": 16.7, "tflops_per_crop": 19.4, "gpu_hours_per_1k": 1.89}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "params": "4B", "bstrb_video_f1": 0.627, "ttft_s": 0.3926, "s_per_token": 0.0215, "latency_s": 0.8464, "tokens": 17.0, "cost_per_1k_frames_usd": 1.71, "n": 70, "errors": 0, "decode_tok_s": 42.1, "prefill_tok_s": 1182.7, "demo_bow_f1": 0.1761, "demo_wir": 0.1728, "demo_fuzzy_f1": 0.1836, "vram_gb": 8.7, "tflops_per_crop": 3.9, "gpu_hours_per_1k": 2.143}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "params": "8B", "bstrb_video_f1": 0.675, "ttft_s": 0.4652, "s_per_token": 0.0204, "latency_s": 0.7112, "tokens": 12.5, "cost_per_1k_frames_usd": 1.29, "n": 70, "errors": 0, "decode_tok_s": 46.0, "prefill_tok_s": 502.9, "demo_bow_f1": 0.1895, "demo_wir": 0.187, "demo_fuzzy_f1": 0.1971, "vram_gb": 16.7, "tflops_per_crop": 7.5, "gpu_hours_per_1k": 1.616}, {"name": "Qwen3-VL-235B", "kind": "api", "params": "235B (22B active)", "bstrb_video_f1": 0.726, "ttft_s": 0.888, "s_per_token": null, "latency_s": 0.9778, "tokens": 12.5, "cost_per_1k_frames_usd": 1.02, "n": 70, "errors": 0, "decode_tok_s": 66.1, "usd_per_m_in": 0.53, "usd_per_m_out": 2.66, "demo_bow_f1": 0.1861, "demo_wir": 0.1624, "demo_fuzzy_f1": 0.213, "reasoning_tokens": 0.0}, {"name": "Kimi K2.6", "kind": "api", "params": null, "bstrb_video_f1": 0.723, "ttft_s": 9.2841, "s_per_token": null, "latency_s": 9.5236, "tokens": 9.5, "cost_per_1k_frames_usd": 11.81, "n": 70, "errors": 0, "decode_tok_s": null, "usd_per_m_in": 0.95, "usd_per_m_out": 4.0, "demo_bow_f1": 0.1904, "demo_wir": 0.1751, "demo_fuzzy_f1": 0.2218, "reasoning_tokens": 2111.0}, {"name": "GPT-6 Astra", "kind": "api", "params": null, "bstrb_video_f1": 0.709, "ttft_s": 9.8463, "s_per_token": 0.0138, "latency_s": 10.3472, "tokens": 17.0, "cost_per_1k_frames_usd": 23.83, "n": 70, "errors": 0, "decode_tok_s": null, "usd_per_m_in": 10.0, "usd_per_m_out": 50.0, "demo_bow_f1": 0.2147, "demo_wir": 0.2049, "demo_fuzzy_f1": 0.2226, "reasoning_tokens": 269.0}, {"name": "GPT-5", "kind": "api", "params": null, "bstrb_video_f1": 0.649, "ttft_s": 11.0027, "s_per_token": null, "latency_s": 11.0052, "tokens": 14.0, "cost_per_1k_frames_usd": 11.15, "n": 70, "errors": 0, "decode_tok_s": null, "usd_per_m_in": 1.25, "usd_per_m_out": 10.0, "demo_bow_f1": 0.1566, "demo_wir": 0.1243, "demo_fuzzy_f1": 0.1869, "reasoning_tokens": 832.0}, {"name": "Claude Opus 5.5", "kind": "api", "params": null, "bstrb_video_f1": null, "ttft_s": 1.3306, "s_per_token": 0.0048, "latency_s": 1.6731, "tokens": 15.5, "cost_per_1k_frames_usd": 4.95, "n": 70, "errors": 0, "decode_tok_s": 153.7, "usd_per_m_in": 4.0, "usd_per_m_out": 20.0, "demo_bow_f1": 0.1589, "demo_wir": 0.1254, "demo_fuzzy_f1": 0.212, "reasoning_tokens": 21.0}]}</script>
 
 <!-- ============================== Attention ============================== -->
-<section class="section alt">
+<section class="section">
   <div class="wrap">
     <h2>Attention Analysis</h2>
-    <p class="lede">Mean attention over generated tokens on held-out frames. The base model attends mainly to the largest print, whereas Hawkeye also attends to smaller text, which it then transcribes.</p>
+    <p class="lede">The base model attends mainly to the largest print, whereas Hawkeye also attends to smaller text, which it then transcribes.</p>
     <figure class="fig">
       <img src="static/images/showcase_attention.webp" alt="Four held-out BSTRB frames with mean attention maps for base and Hawkeye at 4B and 8B." loading="lazy">
       <figcaption>Mean attention maps of the base models and Hawkeye at 4B and 8B (brighter indicates more attention). Frames were selected among those on which Hawkeye outperforms its base model at both sizes.</figcaption>
@@ -271,17 +347,18 @@
 </section>
 
 <!-- ============================== Method ============================== -->
-<section class="section">
+<section class="section alt">
   <div class="wrap">
     <h2>Method</h2>
+    <p class="lede">An open model, fine-tuned on degraded video frames and run in a single pass.</p>
     <figure class="fig">
       <img src="static/images/architecture.webp" alt="Pipeline: scene keyframe, object mask, cropped object, image tiles, visual tokens, transcription." loading="lazy">
     </figure>
-    <ol class="steps">
-      <li><b>Initialization.</b> Hawkeye 4B and 8B are initialized from Qwen3-VL-4B-Instruct and Qwen3-VL-8B-Instruct.</li>
-      <li><b>Training.</b> Supervised fine-tuning on BSTRB video frames, followed by reinforcement learning (GRPO) with a bag-of-words F1 reward.</li>
-      <li><b>Inference.</b> The input is upscaled three times with bicubic interpolation and transcribed in a single pass, without chain-of-thought or tool use.</li>
-    </ol>
+    <div class="steps-grid">
+      <article class="step"><span class="step-n">1</span><h3>Initialization</h3><p>Hawkeye 4B and 8B are initialized from Qwen3-VL-4B-Instruct and Qwen3-VL-8B-Instruct.</p></article>
+      <article class="step"><span class="step-n">2</span><h3>Training</h3><p>Supervised fine-tuning on BSTRB video frames, followed by reinforcement learning (GRPO) with a bag-of-words F1 reward.</p></article>
+      <article class="step"><span class="step-n">3</span><h3>Inference</h3><p>The input is upscaled three times with bicubic interpolation and transcribed in a single pass, without chain-of-thought or tool use.</p></article>
+    </div>
     <details class="more">
       <summary>Implementation details</summary>
       <div class="more-body">
@@ -296,7 +373,7 @@
 </section>
 
 <!-- ============================== Usage ============================== -->
-<section class="section alt">
+<section class="section">
   <div class="wrap">
     <h2>Usage</h2>
     <p class="lede">The <code>hawkeye</code> package implements the inference protocol used in the paper.</p>
@@ -305,12 +382,16 @@ from hawkeye import Hawkeye
 
 reader = Hawkeye("byron123t/Hawkeye-4B")      <span class="c"># or "byron123t/Hawkeye-8B"</span>
 print(reader.read("photo.jpg"))</code></pre>
-    <p class="note">A version using <code>transformers</code> directly is given on the <a href="https://huggingface.co/byron123t/Hawkeye-4B">model card</a>; training, evaluation and analysis code is available in the <a href="https://github.com/byron123t/hawkeye">GitHub repository</a>.</p>
+    <ul class="facts resources">
+      <li><b>Models.</b> <a href="https://huggingface.co/byron123t/Hawkeye-4B">Hawkeye-4B</a> and <a href="https://huggingface.co/byron123t/Hawkeye-8B">Hawkeye-8B</a> on Hugging Face (Apache-2.0); each model card includes a version using <code>transformers</code> directly.</li>
+      <li><b>Dataset.</b> <a href="https://huggingface.co/datasets/byron123t/BSTRB">BSTRB</a> on Hugging Face (CC BY-NC 4.0); access is granted on request under a data-use agreement.</li>
+      <li><b>Code.</b> Training, evaluation and analysis in the <a href="https://github.com/byron123t/hawkeye">GitHub repository</a>.</li>
+    </ul>
   </div>
 </section>
 
 <!-- ============================== BibTeX ============================== -->
-<section class="section" id="bibtex">
+<section class="section alt" id="bibtex">
   <div class="wrap">
     <h2>BibTeX</h2>
     <div class="bibtex">
