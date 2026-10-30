@@ -58,7 +58,7 @@
       return '<tr class="' + (ours ? "is-ours" : "") + '">' +
         '<td><span class="swatch" style="background:' + colorOf(m) + '"></span>' + esc(m.name) +
         (m.params ? ' <span class="muted">' + esc(m.params) + "</span>" : "") + "</td>" +
-        '<td><span class="pill">' + (m.kind === "local" ? "your GPU" : "API") + "</span></td>" +
+        '<td><span class="pill">' + (m.kind === "local" ? "local GPU" : "API") + "</span></td>" +
         "<td>" + fmt(m.bstrb_video_f1, 3) + "</td>" +
         "<td>" + fmt(m.ttft_s, 2) + "</td>" +
         "<td>" + (m.s_per_token == null ? "&mdash;" : fmt(m.s_per_token * 1000, 0)) + "</td>" +
@@ -81,9 +81,9 @@
     var axisMax = Math.ceil(max / step) * step;
     var plotW = W - labelW - valW;
     var x = function (v) { return labelW + (v / axisMax) * plotW; };
-    var s = ['<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" role="img" aria-label="Seconds per frame for each model"' +
+    var s = ['<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" role="img" aria-label="Median latency per crop for each model"' +
              (narrow ? ' class="narrow"' : "") + ">"];
-    s.push('<text class="ctitle" x="' + (narrow ? 0 : labelW) + '" y="14">Seconds to read one frame (lower is faster)</text>');
+    s.push('<text class="ctitle" x="' + (narrow ? 0 : labelW) + '" y="14">Median latency per crop (seconds)</text>');
     for (var t = 0; t <= axisMax + 1e-9; t += step) {
       var gx = x(t).toFixed(1);
       s.push('<line class="gridline" x1="' + gx + '" x2="' + gx + '" y1="' + (top - 4) + '" y2="' + (H - bottom + 4) + '"/>');
@@ -108,8 +108,8 @@
     var note = document.getElementById("speed-note");
     if (note) {
       var bits = [];
-      if (data.frames) bits.push(data.frames + " frames from the demo clips");
-      if (data.gpu) bits.push("local models on " + data.gpu);
+      if (data.frames) bits.push(data.frames + " crops from the demonstration recordings");
+      if (data.gpu) bits.push("local models on one " + data.gpu);
       var txt = bits.join("; ");
       if (data.note) txt += (txt ? ". " : "") + data.note;
       note.textContent = txt;

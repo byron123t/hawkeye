@@ -1,5 +1,5 @@
 {
- "note": "Medians per frame over the demo crops. Local models: batch 1, Hugging Face transformers, bf16. APIs: streamed through a LiteLLM proxy with the paper's protocol and output budgets; hidden reasoning counts toward their time and cost; cost = token counts x list prices (Oct 2026). Accuracy: BoW F1 on held-out BSTRB video frames, from the paper.",
+ "note": "Medians per crop. Local models: batch size 1, Hugging Face transformers, bfloat16. API models: streamed through a LiteLLM proxy with the evaluation protocol and output budgets of the paper; hidden reasoning tokens are included in latency and cost. Cost is computed from token counts and list prices (October 2026). Accuracy is BoW F1 on held-out BSTRB video frames as reported in the paper; Claude Opus 5.5 was not part of that evaluation. Where an API returns the response in a single chunk, first-token latency equals total latency and no per-token latency is given.",
  "frames": 64,
  "gpu": "NVIDIA RTX 6000 Ada Generation",
  "models": [
@@ -110,6 +110,20 @@
    "n": 64,
    "errors": 0,
    "reasoning_tokens": 1056.0
+  },
+  {
+   "name": "Claude Opus 5.5",
+   "kind": "api",
+   "params": null,
+   "bstrb_video_f1": null,
+   "ttft_s": 1.5507,
+   "s_per_token": 0.0061,
+   "latency_s": 1.6431,
+   "tokens": 16.0,
+   "cost_per_1k_frames_usd": 3.05,
+   "n": 64,
+   "errors": 0,
+   "reasoning_tokens": 37.5
   }
  ]
 }
