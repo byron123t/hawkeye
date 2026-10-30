@@ -3,15 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hawkeye: Reading Illegible Text with VLMs</title>
-  <meta name="description" content="Hawkeye4B: Reading Illegible Text with Vision Language Models. BSTRB, a benchmark of blurry, low-resolution scene text from real videos, and Hawkeye, Qwen3-VL fine-tuned to read it.">
+  <title>Hawkeye: Reading Illegible Text</title>
+  <meta name="description" content="Hawkeye reads the small, blurry, far-away text that smart glasses and phone cameras actually capture. BSTRB benchmark, Hawkeye 4B/8B models, code.">
   <meta property="og:title" content="Hawkeye4B: Reading Illegible Text with Vision Language Models">
-  <meta property="og:description" content="BSTRB benchmark and the Hawkeye 4B/8B models for reading degraded, low-resolution text.">
-  <meta property="og:image" content="static/images/frames.webp">
+  <meta property="og:description" content="A 4B vision-language model that keeps reading when text gets small and blurry, and the BSTRB benchmark built from real walk-back videos.">
+  <meta property="og:image" content="static/videos/shelf_walk.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="static/css/index.css">
 </head>
@@ -20,201 +19,266 @@
 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
 
 <!-- ============================== Title ============================== -->
-<section class="section">
-  <div class="container is-max-desktop has-text-centered">
-    <h1 class="title publication-title"><span class="name">Hawkeye4B</span>: Reading Illegible Text<br>with Vision Language Models</h1>
-    <div class="publication-authors">
-      <span class="author-block"><a href="https://orcid.org/0000-0001-6140-922X">Brian Tang</a></span>
-      <span class="author-block"><a href="https://orcid.org/0000-0003-0086-8777">Kang G. Shin</a></span>
+<header class="hero">
+  <div class="wrap center">
+    <p class="kicker">BSTRB benchmark &middot; Hawkeye 4B &amp; 8B</p>
+    <h1 class="title"><span class="name">Hawkeye</span>: Reading Illegible Text<br class="br-wide"> with Vision Language Models</h1>
+    <div class="authors">
+      <a href="https://orcid.org/0000-0001-6140-922X">Brian Tang</a>
+      <a href="https://orcid.org/0000-0003-0086-8777">Kang G. Shin</a>
     </div>
-    <div class="affiliation">University of Michigan, Ann Arbor</div>
+    <div class="affil">University of Michigan, Ann Arbor</div>
 
-    <div class="link-row">
-      <span class="link-btn is-disabled" title="Paper link to be added"><i class="fa-solid fa-file-pdf"></i> Paper</span>
+    <nav class="links" aria-label="Resources">
       <!-- Paper / arXiv: add the links here once posted -->
-      <span class="link-btn is-disabled" title="arXiv link to be added"><i class="fa-solid fa-scroll"></i> arXiv</span>
-      <a class="link-btn" href="https://github.com/byron123t/hawkeye"><i class="fa-brands fa-github"></i> Code</a>
-      <a class="link-btn" href="https://huggingface.co/datasets/byron123t/BSTRB"><i class="fa-solid fa-database"></i> BSTRB Dataset</a>
-      <a class="link-btn" href="https://huggingface.co/byron123t/Hawkeye-4B"><i class="fa-solid fa-cube"></i> Hawkeye-4B</a>
-      <a class="link-btn" href="https://huggingface.co/byron123t/Hawkeye-8B"><i class="fa-solid fa-cube"></i> Hawkeye-8B</a>
+      <span class="btn is-disabled" title="Paper link to be added"><i class="fa-solid fa-file-pdf"></i> Paper</span>
+      <span class="btn is-disabled" title="arXiv link to be added"><i class="fa-solid fa-scroll"></i> arXiv</span>
+      <a class="btn" href="https://github.com/byron123t/hawkeye"><i class="fa-brands fa-github"></i> Code</a>
+      <a class="btn" href="https://huggingface.co/datasets/byron123t/BSTRB"><i class="fa-solid fa-database"></i> Dataset</a>
+      <a class="btn" href="https://huggingface.co/byron123t/Hawkeye-4B"><i class="fa-solid fa-cube"></i> Hawkeye-4B</a>
+      <a class="btn" href="https://huggingface.co/byron123t/Hawkeye-8B"><i class="fa-solid fa-cube"></i> Hawkeye-8B</a>
+    </nav>
+  </div>
+
+  <!-- ============================== Demo video ============================== -->
+  <div class="wrap wide">
+    <div class="demo">
+      <div class="seg" role="tablist" aria-label="Demo clip">
+        <button role="tab" class="seg-btn is-active" data-clip="shelf_walk" aria-selected="true">Walking up &mdash; shelf</button>
+        <button role="tab" class="seg-btn" data-clip="table_walk" aria-selected="false">Walking up &mdash; table</button>
+        <button role="tab" class="seg-btn" data-clip="shelf_hover" aria-selected="false">Live read-out &mdash; shelf</button>
+        <button role="tab" class="seg-btn" data-clip="table_hover" aria-selected="false">Live read-out &mdash; table</button>
+      </div>
+      <div class="player" id="player">
+        <video id="demo-video" autoplay muted loop playsinline preload="metadata"
+               poster="static/videos/shelf_walk.jpg" aria-label="Demo: base model vs. Hawkeye reading text in phone footage">
+          <source id="demo-src" src="static/videos/shelf_walk.mp4" type="video/mp4">
+        </video>
+        <div class="player-missing" id="player-missing" hidden>
+          <i class="fa-solid fa-film"></i>
+          <span>Demo video unavailable</span>
+        </div>
+      </div>
+      <p class="caption">Same phone footage, same frame: the base model and Hawkeye each read what's inside the box.
+        Watch the right-hand transcript keep up as the text gets small.</p>
     </div>
   </div>
-</section>
+</header>
 
-<!-- ============================== Teaser ============================== -->
-<section class="section" style="padding-top:0">
-  <div class="container is-max-desktop">
-    <figure class="fig">
-      <img class="pad" src="static/images/frames.webp" alt="Six frames from one BSTRB video: a baking-mix box shrinks from 19.6 px to 4.5 px mean text height as the camera walks back, and a VLM's transcription mistakes grow from 0 to over 45.">
-      <figcaption><b>The same text, from legible to illegible.</b> Each BSTRB video is filmed walking backwards from an object, so one human-verified transcription covers frames whose text shrinks from about 20&nbsp;px to under 5&nbsp;px. Here GPT-5.2 makes no mistakes on the first frame and more than 45 on the last; Hawkeye is trained to keep reading as the text degrades.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============================== Abstract ============================== -->
-<section class="section alt">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Abstract</h2>
-    <div class="content has-text-justified">
-      <p>While modern Vision-Language Models (VLMs) have been remarkably successful in general scene text recognition, they consistently struggle with the long-tail distribution of text that is degraded by motion blur or low resolution. These limitations are particularly apparent in egocentric applications like smart glasses, where text is often captured in noisy environments. In this paper, we introduce the <strong>BSTRB</strong> (Blurry Scene Text Recognition Benchmark), a novel benchmark of 9,936 noisy image samples with high-fidelity ground-truth annotations derived from 1,699 real-world video sequences. To support this, we present <strong>Hawkeye4B</strong>, a VLM fine-tuned on BSTRB to read and reason about illegible text by leveraging deep contextual priors and pixel-level visual alignment. Our results show that Hawkeye4B matches or exceeds text transcription performance on much larger closed-weight VLMs, making it practical for real-time deployment. We characterize the text resolution at which current VLMs begin to fail.</p>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><div class="num">+10.1 pp</div><div class="lbl">BoW F1 over base Qwen3-VL-4B on held-out BSTRB video (.627 &rarr; .728)</div></div>
-      <div class="stat"><div class="num">0</div><div class="lbl">significant BoW-F1 regressions on 10 general OCR benchmarks, at 4B or 8B</div></div>
-      <div class="stat"><div class="num">14.3% &rarr; 7.2%</div><div class="lbl">repetition loops on BSTRB video text &le;20&nbsp;px, base Qwen3-VL-4B vs. Hawkeye 4B</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================== Method ============================== -->
+<!-- ============================== Story ============================== -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Method</h2>
-    <figure class="fig">
-      <img class="pad" src="static/images/architecture.webp" alt="Pipeline: scene keyframe, object mask, cropped object, image tiles, visual tokens, transcription.">
-      <figcaption><b>Object-centric pipeline.</b> Keyframes are sampled at a fixed rate, the object is segmented (SAM 3) and cropped, and the crop is read by the VLM in a single pass.</figcaption>
-    </figure>
-    <div class="content">
-      <ul>
-        <li><strong>Base models.</strong> Hawkeye 4B and Hawkeye 8B start from Qwen3-VL-4B-Instruct and Qwen3-VL-8B-Instruct.</li>
-        <li><strong>Training.</strong> Supervised fine-tuning on BSTRB video frames, then GRPO reinforcement learning with a bag-of-words F1 reward against the transcription.</li>
-        <li><strong>Inference.</strong> The input is upscaled &times;3 with bicubic interpolation (no learned super-resolution) and capped at about 1&nbsp;MP; one greedy pass, no visual chain-of-thought, no tools.</li>
-      </ul>
+  <div class="wrap">
+    <div class="cards">
+      <article class="card">
+        <div class="card-icon"><i class="fa-solid fa-magnifying-glass-minus"></i></div>
+        <div class="card-num">&lt; 5 px</div>
+        <h3>Text gets small fast</h3>
+        <p>Glasses and phones see labels from a step or two away, where letters are only a few pixels tall. Today's vision-language models start guessing, or loop, right there.</p>
+      </article>
+      <article class="card">
+        <div class="card-icon"><i class="fa-solid fa-eye"></i></div>
+        <div class="card-num">+10.1 pts</div>
+        <h3>Hawkeye keeps reading</h3>
+        <p>Trained on real walk-back videos, Hawkeye 4B scores 10 points higher than the model it started from on held-out blurry video (word-level F1 .627 &rarr; .728).</p>
+      </article>
+      <article class="card">
+        <div class="card-icon"><i class="fa-solid fa-glasses"></i></div>
+        <div class="card-num">.744 vs .726</div>
+        <h3>Small and fast enough for glasses</h3>
+        <p>At 8B parameters, Hawkeye matches or beats far larger models on blurry video, including Qwen3-VL-235B, and runs on a single local GPU.</p>
+      </article>
     </div>
   </div>
 </section>
+
+<!-- ============================== The problem ============================== -->
+<section class="section alt">
+  <div class="wrap">
+    <h2>From legible to illegible in a few steps</h2>
+    <p class="lede">Every BSTRB clip is filmed walking backwards from an object, so one human-checked transcription covers frames whose text shrinks from about 20&nbsp;px to under 5&nbsp;px tall. That is the range where reading breaks down.</p>
+    <figure class="fig">
+      <img src="static/images/frames.webp" alt="Six frames from one BSTRB video: a box of text shrinks from 19.6 px to 4.5 px mean text height as the camera walks back; a VLM's transcription mistakes grow from 0 to over 45." loading="lazy">
+      <figcaption>The same box, six moments of one clip. A strong API model makes no mistakes on the first frame and more than 45 on the last.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================== Speed and cost ============================== -->
+<section class="section" id="speed">
+  <div class="wrap">
+    <h2>Fast enough to read live</h2>
+    <p class="lede" id="speed-lede">Hawkeye reads a frame in about a second on one local GPU, as fast as the much larger Qwen3-VL-235B behind an API and 9&ndash;13&times; faster than the reasoning API models, with no per-image cost. All models read the same crops from the demo clips.</p>
+    <div id="speed-chart" class="chart"></div>
+    <div class="table-wrap">
+      <table class="res" id="speed-table">
+        <thead><tr>
+          <th>Model</th><th>Runs</th><th>Accuracy<span class="th-sub">BSTRB video BoW F1</span></th>
+          <th>First token<span class="th-sub">seconds</span></th><th>Per token<span class="th-sub">milliseconds</span></th>
+          <th>Per frame<span class="th-sub">seconds</span></th><th>Cost<span class="th-sub">per 1,000 frames</span></th>
+        </tr></thead>
+        <tbody><tr><td colspan="7" class="muted">Measurements are being added.</td></tr></tbody>
+      </table>
+    </div>
+    <p class="note" id="speed-note"></p>
+  </div>
+</section>
+<!-- Speed data: paste the contents of static/data/speed.json here. When non-empty it is used
+     instead of fetching the file, so the page also works when opened straight from disk. -->
+<script id="speed-data" type="application/json">{"note": "Medians per frame over the demo crops. Local models: batch 1, Hugging Face transformers, bf16. APIs: streamed through a LiteLLM proxy with the paper's protocol and output budgets; hidden reasoning counts toward their time and cost; cost = token counts x list prices (Oct 2026). Accuracy: BoW F1 on held-out BSTRB video frames, from the paper.", "frames": 64, "gpu": "NVIDIA RTX 6000 Ada Generation", "models": [{"name": "Hawkeye 4B", "kind": "local", "params": "4B", "bstrb_video_f1": 0.728, "ttft_s": 0.5554, "s_per_token": 0.0265, "latency_s": 1.0525, "tokens": 17.0, "cost_per_1k_frames_usd": null, "n": 64, "errors": 0}, {"name": "Hawkeye 8B", "kind": "local", "params": "8B", "bstrb_video_f1": 0.744, "ttft_s": 0.6349, "s_per_token": 0.0289, "latency_s": 1.0368, "tokens": 15.5, "cost_per_1k_frames_usd": null, "n": 64, "errors": 0}, {"name": "Qwen3-VL-4B (base)", "kind": "local", "params": "4B", "bstrb_video_f1": 0.627, "ttft_s": 0.4766, "s_per_token": 0.0244, "latency_s": 0.8076, "tokens": 12.0, "cost_per_1k_frames_usd": null, "n": 64, "errors": 0}, {"name": "Qwen3-VL-8B (base)", "kind": "local", "params": "8B", "bstrb_video_f1": 0.675, "ttft_s": 0.455, "s_per_token": 0.0266, "latency_s": 0.7752, "tokens": 11.0, "cost_per_1k_frames_usd": null, "n": 64, "errors": 0}, {"name": "Qwen3-VL-235B", "kind": "api", "params": "235B (22B active)", "bstrb_video_f1": 0.726, "ttft_s": 0.9001, "s_per_token": null, "latency_s": 1.0126, "tokens": 12.0, "cost_per_1k_frames_usd": 0.19, "n": 64, "errors": 0, "reasoning_tokens": 0.0}, {"name": "Kimi K2.6", "kind": "api", "params": null, "bstrb_video_f1": 0.723, "ttft_s": 13.9535, "s_per_token": null, "latency_s": 14.0318, "tokens": 11.5, "cost_per_1k_frames_usd": 12.49, "n": 64, "errors": 0, "reasoning_tokens": 2926.0}, {"name": "GPT-6 Astra", "kind": "api", "params": null, "bstrb_video_f1": 0.709, "ttft_s": 8.7878, "s_per_token": 0.0144, "latency_s": 9.1227, "tokens": 18.5, "cost_per_1k_frames_usd": 17.92, "n": 64, "errors": 0, "reasoning_tokens": 241.5}, {"name": "GPT-5", "kind": "api", "params": null, "bstrb_video_f1": 0.649, "ttft_s": 12.8628, "s_per_token": null, "latency_s": 12.8682, "tokens": 17.0, "cost_per_1k_frames_usd": 11.85, "n": 64, "errors": 0, "reasoning_tokens": 1056.0}]}</script>
 
 <!-- ============================== Dataset ============================== -->
 <section class="section alt">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">The BSTRB benchmark</h2>
-    <div class="content">
-      <p>BSTRB pairs real, degraded captures with transcriptions made while the text was still legible. Participants filmed everyday objects (packaging, books, screens, signs, medicine, documents) at home, walking backwards so the text shrinks frame by frame; six frames are sampled per video, and the video's transcription is the target for every frame. The evaluation splits use human-verified (&ldquo;golden&rdquo;) transcriptions.</p>
-    </div>
+  <div class="wrap">
+    <h2>The BSTRB benchmark</h2>
+    <p class="lede">People filmed everyday objects at home (packaging, books, medicine, signs, screens) while stepping back. Six frames per clip and one transcription per clip, checked by hand for the evaluation splits.</p>
+    <figure class="fig">
+      <img src="static/images/dataset_grid.webp" alt="Grid of held-out BSTRB clips, one object per row, at six frame positions, each labelled with its median text height." loading="lazy">
+      <figcaption>Held-out clips at all six frame positions, with the median text height of each frame.</figcaption>
+    </figure>
     <div class="table-wrap">
       <table class="res">
-        <thead><tr><th>Released split</th><th>Video frames</th><th>Videos</th><th>Photos</th><th class="txt">Labels</th></tr></thead>
+        <thead><tr><th>Split</th><th>Video frames</th><th>Videos</th><th>Photos</th><th class="txt">Labels</th></tr></thead>
         <tbody>
-          <tr><td>train</td><td>6,704</td><td>1,128</td><td>695</td><td class="txt">automatic (GPT-5); photo labels are often incomplete</td></tr>
+          <tr><td>train</td><td>6,704</td><td>1,128</td><td>695</td><td class="txt">automatic (GPT-5)</td></tr>
           <tr><td>validation</td><td>333</td><td>56</td><td>36</td><td class="txt">human-verified</td></tr>
-          <tr><td>test (held out)</td><td>1,325</td><td>223</td><td>241</td><td class="txt">human-verified</td></tr>
+          <tr><td>test</td><td>1,325</td><td>223</td><td>241</td><td class="txt">human-verified</td></tr>
         </tbody>
       </table>
-      <p class="note">No video appears in more than one split. Validation was used to choose the training recipe and checkpoints; every number on this page is on the held-out test split. Released file names are neutral ids; the data is gated behind a data-use agreement.</p>
     </div>
-    <div class="fig-pair">
-      <figure class="fig">
-        <img class="pad" src="static/images/dataset_composition_v2.webp" alt="Bar charts of object, scene and text categories in BSTRB.">
-        <figcaption><b>Composition</b> by object, scene and text type, over the collected clips.</figcaption>
-      </figure>
-      <figure class="fig">
-        <img class="pad" src="static/images/text_density_compare.webp" alt="Distribution of ground-truth words per image for BSTRB and other OCR benchmarks.">
-        <figcaption><b>Text density.</b> Ground-truth words per image; BSTRB (orange) is denser than every benchmark except HierText and RIMES.</figcaption>
-      </figure>
-    </div>
-    <figure class="fig narrow">
-      <img src="static/images/dataset_grid.webp" alt="Grid of held-out BSTRB clips, one object per row, at six frame positions, each labelled with median text height." loading="lazy">
-      <figcaption><b>Held-out clips</b> at all six frame positions, with the median text height of each frame (downsampled here).</figcaption>
-    </figure>
+    <details class="more">
+      <summary>Dataset details</summary>
+      <div class="more-body">
+        <p>No video appears in more than one split. Validation was used to choose the training recipe and checkpoints; results are on the held-out test split. File names are neutral ids, image metadata (including GPS) was removed, and the data is gated behind a data-use agreement. Automatic training labels for photos are often incomplete, which is why Hawkeye trains on video frames only.</p>
+        <div class="fig-pair">
+          <figure class="fig"><img src="static/images/dataset_composition_v2.webp" alt="Bar charts of object, scene and text categories in BSTRB." loading="lazy"><figcaption>Composition by object, scene and text type.</figcaption></figure>
+          <figure class="fig"><img src="static/images/text_density_compare.webp" alt="Words per image for BSTRB and other OCR benchmarks." loading="lazy"><figcaption>Words per image: BSTRB is denser than most OCR benchmarks.</figcaption></figure>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
 
 <!-- ============================== Results ============================== -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Results</h2>
-
+  <div class="wrap">
+    <h2>Where the gain is</h2>
+    <p class="lede">The smaller the text, the bigger Hawkeye's lead over the model it started from; on blurry video it is as good as the strongest API models.</p>
     <figure class="fig">
-      <img src="static/images/heatmap_bow_f1.webp" alt="Heatmap of BoW F1 for 20 API models, the Qwen3-VL bases and Hawkeye across 10 OCR datasets and held-out BSTRB." loading="lazy">
-      <figcaption><b>Transcription benchmark, BoW F1.</b> Columns: 20 API models, the Qwen3-VL bases and Hawkeye; rows: 10 OCR datasets and held-out BSTRB. Boxed: best per row. Hawkeye (Qwen3-VL-8B) is best on BSTRB video.</figcaption>
+      <img src="static/images/bstrb_split_bow_f1.webp" alt="Word-level accuracy (BoW F1) on held-out BSTRB video by text height, split at 20 px. Left: Hawkeye vs. its base. Right: Hawkeye vs. the strongest API models." loading="lazy">
+      <figcaption>Accuracy (share of words read correctly, BoW F1) by text height on held-out BSTRB video. Left: Hawkeye vs. its own base model. Right: vs. the strongest API models.</figcaption>
     </figure>
-
-    <figure class="fig">
-      <img src="static/images/bstrb_split_bow_f1.webp" alt="BoW F1 by mean text height on held-out BSTRB video, split at 20 px." loading="lazy">
-      <figcaption><b>Where the gain is.</b> BoW F1 on held-out BSTRB video (1,331 frames, 224 videos) by mean text height, split at 20&nbsp;px with a separate y-scale on each side. Left: Hawkeye vs. its own base; right: vs. the strongest API VLMs. Bands: bootstrap 95% CIs.</figcaption>
-    </figure>
-
-    <h3 class="title is-5">Hawkeye vs. its own base</h3>
-    <div class="table-wrap">
-      <table class="res">
-        <thead><tr><th>Benchmark (held-out)</th><th class="txt">Hawkeye 4B &minus; Qwen3-VL-4B</th><th class="txt">Hawkeye 8B &minus; Qwen3-VL-8B</th></tr></thead>
-        <tbody>
-          <tr><td>BSTRB video, BoW F1 (1,331 frames)</td><td class="up txt">+10.1 pp (.627 &rarr; .728)</td><td class="up txt">+6.9 pp (.675 &rarr; .744)</td></tr>
-          <tr><td>BSTRB photos, BoW F1 (241)</td><td class="up txt">+6.0 pp</td><td class="up txt">+5.3 pp</td></tr>
-          <tr><td>10 general OCR sets, BoW F1</td><td class="txt">4 better, 6 n.s., 0 worse</td><td class="txt">2 better, 8 n.s., 0 worse</td></tr>
-          <tr><td>Smart-glasses captures (37 objects)</td><td class="txt">BoW F1 +14.7, aligned F1 +16.6 pp; word inclusion n.s.</td><td class="up txt">word inclusion +13.0, BoW F1 +11.5, aligned F1 +12.3 pp</td></tr>
-          <tr><td>Snellen charts, text &le;7 px (50 charts)</td><td class="up txt">+7.2 pp</td><td class="up txt">+7.5 pp</td></tr>
-          <tr><td>Repetition loops, BSTRB video &le;20 px</td><td class="up txt">14.3% &rarr; 7.2%</td><td class="up txt">8.5% &rarr; 5.2%</td></tr>
-        </tbody>
-      </table>
-      <p class="note">Paired bootstrap, clustered by video (BSTRB), object (smart glasses) or chart (Snellen); Holm-corrected; highlighted cells are significant. pp = percentage points.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">0</div><div class="lbl">significant losses on 10 standard OCR benchmarks, at either size</div></div>
+      <div class="stat"><div class="num">+13 pts</div><div class="lbl">more words read on objects captured with Meta Ray-Ban smart glasses (Hawkeye 8B)</div></div>
+      <div class="stat"><div class="num">&frac12;</div><div class="lbl">as many runaway repetition loops on tiny text (14.3% &rarr; 7.2%, 4B)</div></div>
     </div>
 
-    <div class="fig-pair">
-      <figure class="fig">
-        <img class="pad" src="static/images/forest_vs_base.webp" alt="Forest plot of Hawkeye minus base BoW F1 per dataset with 95% CIs, for 4B and 8B." loading="lazy">
-        <figcaption><b>Per-dataset differences</b> with 95% CIs, clustered by video; filled = significant after Holm.</figcaption>
-      </figure>
-      <figure class="fig">
-        <img class="pad" src="static/images/ood_metrics.webp" alt="Bar chart of word inclusion, BoW F1 and aligned F1 for base Qwen3-VL-8B and Hawkeye 8B on smart-glasses captures." loading="lazy">
-        <figcaption><b>Out of distribution.</b> 37 objects captured with Meta Ray-Ban smart glasses (screens, signage, documents, outdoors, Chinese text): Hawkeye 8B vs. Qwen3-VL-8B.</figcaption>
-      </figure>
-    </div>
-    <div class="fig-pair">
-      <figure class="fig">
-        <img class="pad" src="static/images/snellen_accuracy_vs_distance.webp" alt="Character accuracy on Snellen charts versus text height for API models and Hawkeye 4B." loading="lazy">
-        <figcaption><b>Clean small text.</b> Snellen-style charts: character accuracy vs. text height. Most models hold to about 5&nbsp;px; at 4&nbsp;px Hawkeye 4B is the most accurate model shown.</figcaption>
-      </figure>
-      <figure class="fig">
-        <img class="pad" src="static/images/ocr_vs_vlm.webp" alt="BoW F1 of OCR engines and VLMs on BSTRB." loading="lazy">
-        <figcaption><b>OCR engines vs. VLMs.</b> Google Vision is competitive only on the sharp reference frames; Tesseract and EasyOCR fall far behind on degraded frames.</figcaption>
-      </figure>
-    </div>
+    <details class="more">
+      <summary>More results and how they were measured</summary>
+      <div class="more-body">
+        <figure class="fig">
+          <img src="static/images/heatmap_bow_f1.webp" alt="Heatmap of BoW F1 for 20 API models, the Qwen3-VL bases and Hawkeye across 10 OCR datasets and held-out BSTRB." loading="lazy">
+          <figcaption>BoW F1 for 20 API models, the Qwen3-VL bases and Hawkeye on 10 OCR datasets and held-out BSTRB. Boxed: best per row.</figcaption>
+        </figure>
+        <div class="table-wrap">
+          <table class="res">
+            <thead><tr><th>Benchmark (held-out)</th><th class="txt">Hawkeye 4B &minus; Qwen3-VL-4B</th><th class="txt">Hawkeye 8B &minus; Qwen3-VL-8B</th></tr></thead>
+            <tbody>
+              <tr><td>BSTRB video, BoW F1</td><td class="up txt">+10.1 pp (.627 &rarr; .728)</td><td class="up txt">+6.9 pp (.675 &rarr; .744)</td></tr>
+              <tr><td>BSTRB photos, BoW F1 (241)</td><td class="up txt">+6.0 pp</td><td class="up txt">+5.3 pp</td></tr>
+              <tr><td>10 general OCR sets, BoW F1</td><td class="txt">4 better, 6 n.s., 0 worse</td><td class="txt">2 better, 8 n.s., 0 worse</td></tr>
+              <tr><td>Smart-glasses captures (37 objects)</td><td class="txt">BoW F1 +14.7, aligned F1 +16.6 pp; word inclusion n.s.</td><td class="up txt">word inclusion +13.0, BoW F1 +11.5, aligned F1 +12.3 pp</td></tr>
+              <tr><td>Snellen charts, text &le;7 px (50 charts)</td><td class="up txt">+7.2 pp</td><td class="up txt">+7.5 pp</td></tr>
+              <tr><td>Repetition loops, BSTRB video &le;20 px</td><td class="up txt">14.3% &rarr; 7.2%</td><td class="up txt">8.5% &rarr; 5.2%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">Paper numbers on the full held-out video set (1,331 frames, 224 videos); the public test split omits one video for privacy, which moves every score by at most 0.001. Paired bootstrap, clustered by video (BSTRB), object (smart glasses) or chart (Snellen); Holm-corrected; highlighted cells are significant. pp = percentage points.</p>
+        <div class="fig-pair">
+          <figure class="fig"><img src="static/images/forest_vs_base.webp" alt="Forest plot of Hawkeye minus base BoW F1 per dataset with 95% CIs, for 4B and 8B." loading="lazy"><figcaption>Per-dataset differences from the base model, 95% CIs; filled = significant.</figcaption></figure>
+          <figure class="fig"><img src="static/images/ood_metrics.webp" alt="Word inclusion, BoW F1 and aligned F1 for base Qwen3-VL-8B and Hawkeye 8B on smart-glasses captures." loading="lazy"><figcaption>Smart-glasses captures (37 objects): Hawkeye 8B vs. Qwen3-VL-8B.</figcaption></figure>
+          <figure class="fig"><img src="static/images/snellen_accuracy_vs_distance.webp" alt="Character accuracy on Snellen charts versus text height." loading="lazy"><figcaption>Clean small text (Snellen charts): most models hold to about 5&nbsp;px; at 4&nbsp;px Hawkeye 4B is the most accurate shown.</figcaption></figure>
+          <figure class="fig"><img src="static/images/ocr_vs_vlm.webp" alt="BoW F1 of OCR engines and VLMs on BSTRB." loading="lazy"><figcaption>Classic OCR engines fall far behind on degraded frames.</figcaption></figure>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
 
 <!-- ============================== Where Hawkeye looks ============================== -->
 <section class="section alt">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Where Hawkeye looks</h2>
-    <div class="content">
-      <p>We record each generated token's attention to the image (last four layers, attention-sink patches excluded). Both base and Hawkeye attend to the word they are writing far above chance, and Hawkeye does not visit more text regions on average. What changes is how far it reads: on small text it goes on into fine print the base skips, and it stops less often after a title or falls into a loop. The examples below are hand-picked illustrations of that behaviour.</p>
-    </div>
+  <div class="wrap">
+    <h2>Where Hawkeye looks</h2>
+    <p class="lede">Attention maps show the difference: the base model stays on the big print, while Hawkeye also looks at the small print, and then writes it down.</p>
     <figure class="fig">
       <img src="static/images/showcase_attention.webp" alt="Four held-out BSTRB frames with mean attention maps for base and Hawkeye at 4B and 8B." loading="lazy">
-      <figcaption><b>Mean attention over the generated tokens</b> on held-out frames where Hawkeye beats its base at both sizes. The bases stay on the large print; Hawkeye also attends to the small print it then transcribes, and reads a dense back cover where the 4B base loops and the 8B base reports no text.</figcaption>
-    </figure>
-    <figure class="fig narrow">
-      <img src="static/images/reading_trace_reddit.webp" alt="Reading trace of base Qwen3-VL-4B and Hawkeye 4B on a web page photographed with smart glasses." loading="lazy">
-      <figcaption><b>Reading trace</b> (peak attention patch per generated token, in decoding order) on a web page photographed with smart glasses. Base Qwen3-VL-4B transcribes one post title and stops (BoW F1 .12); Hawkeye 4B reads the sidebar and the post verbatim (.84).</figcaption>
+      <figcaption>Brighter = more attention, averaged over everything the model wrote. Hand-picked frames where Hawkeye beats its base at both sizes.</figcaption>
     </figure>
     <figure class="fig">
-      <img src="static/images/attention_filmstrip.webp" alt="Attention at individual decoding steps, zoomed to the word being emitted, for base and Hawkeye at 4B and 8B." loading="lazy">
-      <figcaption><b>Attention at individual decoding steps</b>, zoomed to the word in each title; the cross marks the attention peak and the box the word located by OCR (green: peak on the word). Hawkeye's peak tracks the word it is emitting through the post body.</figcaption>
+      <img src="static/images/attention_filmstrip.webp" alt="Attention at individual decoding steps, zoomed to the word being written, for base and Hawkeye at 4B and 8B." loading="lazy">
+      <figcaption>Word by word: where each model looks at the moment it writes the word above the panel (cross = attention peak, box = that word in the image).</figcaption>
     </figure>
+    <details class="more">
+      <summary>How this was measured</summary>
+      <div class="more-body">
+        <p>Attention to image patches from the last four layers, averaged over heads, with content-free "attention sink" patches excluded. Across all frames, both models' attention lands on the word being written far above chance, and Hawkeye does not visit more text regions on average; what changes is how far it keeps reading. The examples above are illustrations, chosen by hand.</p>
+        <figure class="fig narrow"><img src="static/images/reading_trace_reddit.webp" alt="Reading trace of base Qwen3-VL-4B and Hawkeye 4B on a web page photographed with smart glasses." loading="lazy"><figcaption>Reading trace on a web page photographed with smart glasses: the base model reads one title and stops; Hawkeye reads the sidebar and the post.</figcaption></figure>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============================== How it works ============================== -->
+<section class="section">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <figure class="fig">
+      <img src="static/images/architecture.webp" alt="Pipeline: scene keyframe, object mask, cropped object, image tiles, visual tokens, transcription." loading="lazy">
+    </figure>
+    <ol class="steps">
+      <li><b>Start from an open model.</b> Hawkeye 4B and 8B begin as Qwen3-VL-4B and -8B.</li>
+      <li><b>Show it real blur.</b> Fine-tune on BSTRB video frames, then reward it for every correct word it reads.</li>
+      <li><b>Read in one pass.</b> Enlarge the image 3&times; and read once: no chain-of-thought, no tools, no second look.</li>
+    </ol>
+    <details class="more">
+      <summary>Technical details</summary>
+      <div class="more-body">
+        <ul>
+          <li><b>Training.</b> Supervised fine-tuning on 6,734 BSTRB training frames (vision encoder unfrozen, 420 steps), then GRPO with LoRA (rank 64) and a bag-of-words F1 reward against the transcription, 300 steps.</li>
+          <li><b>Inference.</b> An OCR system prompt, the instruction, then the image upscaled &times;3 with bicubic interpolation (the processor caps it at about 1&nbsp;MP); greedy decoding, up to 4,096 new tokens.</li>
+          <li><b>Evaluation.</b> Every model gets the same prompt and image; scores are per image after normalizing case, punctuation and whitespace.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============================== Abstract ============================== -->
+<section class="section alt">
+  <div class="wrap">
+    <h2>Abstract</h2>
+    <p class="abstract">While modern Vision-Language Models (VLMs) have been remarkably successful in general scene text recognition, they consistently struggle with the long-tail distribution of text that is degraded by motion blur or low resolution. These limitations are particularly apparent in egocentric applications like smart glasses, where text is often captured in noisy environments. In this paper, we introduce the <strong>BSTRB</strong> (Blurry Scene Text Recognition Benchmark), a novel benchmark of 9,936 noisy image samples with high-fidelity ground-truth annotations derived from 1,699 real-world video sequences. To support this, we present <strong>Hawkeye4B</strong>, a VLM fine-tuned on BSTRB to read and reason about illegible text by leveraging deep contextual priors and pixel-level visual alignment. Our results show that Hawkeye4B matches or exceeds text transcription performance on much larger closed-weight VLMs, making it practical for real-time deployment. We characterize the text resolution at which current VLMs begin to fail.</p>
   </div>
 </section>
 
 <!-- ============================== Quick start ============================== -->
 <section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">Quick start</h2>
-    <div class="content">
-      <p>The <code>hawkeye</code> package applies the exact protocol used in the paper: an OCR system prompt, the image upscaled &times;3 with bicubic interpolation (the processor then caps it at 1,003,520 pixels), greedy decoding. A plain <code>transformers</code> version is on the <a href="https://huggingface.co/byron123t/Hawkeye-4B">model card</a>; training, evaluation and analysis code is in the <a href="https://github.com/byron123t/hawkeye">GitHub repository</a>.</p>
-    </div>
-<pre><code>pip install "hawkeye[infer] @ git+https://github.com/byron123t/hawkeye"
-
+  <div class="wrap">
+    <h2>Try it</h2>
+    <p class="lede">A few lines with the <code>hawkeye</code> package, which applies the exact setup used in the paper.</p>
+<pre class="code"><code><span class="c"># pip install "hawkeye[infer] @ git+https://github.com/byron123t/hawkeye"</span>
 from hawkeye import Hawkeye
-reader = Hawkeye("byron123t/Hawkeye-4B")      # or "byron123t/Hawkeye-8B"
-print(reader.read("frame.jpg"))</code></pre>
+
+reader = Hawkeye("byron123t/Hawkeye-4B")      <span class="c"># or "byron123t/Hawkeye-8B"</span>
+print(reader.read("photo.jpg"))</code></pre>
+    <p class="note">A plain <code>transformers</code> version is on the <a href="https://huggingface.co/byron123t/Hawkeye-4B">model card</a>; training, evaluation and analysis code is in the <a href="https://github.com/byron123t/hawkeye">GitHub repository</a>.</p>
   </div>
 </section>
 
 <!-- ============================== BibTeX ============================== -->
 <section class="section alt" id="bibtex">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3">BibTeX</h2>
+  <div class="wrap">
+    <h2>BibTeX</h2>
     <div class="bibtex">
       <button class="copy-btn" id="copy-bib" type="button"><i class="fa-regular fa-copy"></i> Copy</button>
 <pre id="bib"><code>@article{tang2026hawkeye,
@@ -228,31 +292,12 @@ print(reader.read("frame.jpg"))</code></pre>
 </section>
 
 <footer class="footer">
-  <div class="container is-max-desktop has-text-centered">
+  <div class="wrap center">
     <p>Code and model weights: Apache-2.0. BSTRB: CC BY-NC 4.0, gated access with a data-use agreement.</p>
     <p>Page layout inspired by the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page.</p>
   </div>
 </footer>
 
-<script>
-  // copy BibTeX
-  document.getElementById("copy-bib").addEventListener("click", function () {
-    var text = document.querySelector("#bib code").innerText, btn = this;
-    var done = function () { btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied'; setTimeout(function () { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy'; }, 1600); };
-    if (navigator.clipboard) { navigator.clipboard.writeText(text).then(done, function () {}); }
-  });
-  // light/dark toggle; follows the system setting until the visitor picks one
-  (function () {
-    var root = document.documentElement, key = "hawkeye-theme";
-    try { var saved = localStorage.getItem(key); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
-    document.getElementById("theme-toggle").addEventListener("click", function () {
-      var dark = root.getAttribute("data-theme") ? root.getAttribute("data-theme") === "dark"
-                                                  : window.matchMedia("(prefers-color-scheme: dark)").matches;
-      var next = dark ? "light" : "dark";
-      root.setAttribute("data-theme", next);
-      try { localStorage.setItem(key, next); } catch (e) {}
-    });
-  })();
-</script>
+<script src="static/js/main.js"></script>
 </body>
 </html>
