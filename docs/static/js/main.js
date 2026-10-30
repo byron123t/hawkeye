@@ -49,6 +49,17 @@
     return "$" + (x < 10 ? Number(x).toFixed(2) : Number(x).toFixed(0));
   }
 
+  function gpuPrice(data) {
+    var el = document.getElementById("gpu-price");
+    var v = el ? parseFloat(el.value) : NaN;
+    return isNaN(v) || v < 0 ? (data.gpu_price_usd_per_h || 0) : v;
+  }
+
+  function costOf(m, data) {
+    if (m.kind === "local" && m.gpu_hours_per_1k != null) return m.gpu_hours_per_1k * gpuPrice(data);
+    return m.cost_per_1k_frames_usd;
+  }
+
   function renderTable(data) {
     var tb = document.querySelector("#speed-table tbody");
     if (!tb) return;
@@ -57,13 +68,14 @@
       var ours = (m.name || "").toLowerCase().indexOf("hawkeye") >= 0;
       return '<tr class="' + (ours ? "is-ours" : "") + '">' +
         '<td><span class="swatch" style="background:' + colorOf(m) + '"></span>' + esc(m.name) +
-        (m.params ? ' <span class="muted">' + esc(m.params) + "</span>" : "") + "</td>" +
-        '<td><span class="pill">' + (m.kind === "local" ? "local GPU" : "API") + "</span></td>" +
+        ' <span class="pill">' + (m.kind === "local" ? "local" : "API") + "</span></td>" +
         "<td>" + fmt(m.bstrb_video_f1, 3) + "</td>" +
+        "<td>" + fmt(m.vram_gb, 1) + "</td>" +
+        "<td>" + fmt(m.tflops_per_crop, 1) + "</td>" +
         "<td>" + fmt(m.ttft_s, 2) + "</td>" +
         "<td>" + (m.s_per_token == null ? "&mdash;" : fmt(m.s_per_token * 1000, 0)) + "</td>" +
         "<td>" + fmt(m.latency_s, 2) + "</td>" +
-        "<td>" + money(m.cost_per_1k_frames_usd) + "</td></tr>";
+        "<td>" + money(costOf(m, data)) + (m.kind === "local" ? "*" : "") + "</td></tr>";
     }).join("");
   }
 
@@ -103,6 +115,11 @@
     if (!data || !data.models || !data.models.length) return;
     renderTable(data);
     renderChart(data);
+    var pe = document.getElementById("gpu-price");
+    if (pe) {
+      if (!pe.value) pe.value = (data.gpu_price_usd_per_h || 0).toFixed(2);
+      pe.addEventListener("input", function () { renderTable(data); });
+    }
     var t = null;
     window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () { renderChart(data); }, 150); });
     var note = document.getElementById("speed-note");
